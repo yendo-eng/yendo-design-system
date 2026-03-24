@@ -77,16 +77,21 @@ class _OffersSelectionScreenV4State extends State<OffersSelectionScreenV4> {
 
           const SizedBox(height: AppSpacing.lg),
 
-          // ── Compare offers link — above the cards ───────
-          Center(
-            child: AppButton(
-              label: 'Compare offers',
-              variant: AppButtonVariant.link,
-              onPressed: () => _showCompareSheet(context),
+          // ── Compare offers link — right-aligned, tight above cards ──
+          Padding(
+            padding: const EdgeInsets.only(
+              right: AppSpacing.screenPaddingH,
+              bottom: AppSpacing.xs,
+            ),
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: AppButton(
+                label: 'Compare offers',
+                variant: AppButtonVariant.link,
+                onPressed: () => _showCompareSheet(context),
+              ),
             ),
           ),
-
-          const SizedBox(height: AppSpacing.md),
 
           // ── Offer cards — no APR, no View terms ─────────
           ...widget.offers.asMap().entries.map((e) => Padding(
