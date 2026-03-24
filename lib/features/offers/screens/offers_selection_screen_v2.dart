@@ -201,7 +201,7 @@ class _OffersSelectionScreenV2State extends State<OffersSelectionScreenV2> {
                       CompareOffersScreen.buildComparisonTable(widget.offers),
                       const SizedBox(height: AppSpacing.lg),
                       Text(
-                        '* APR is dependent based on variable interest rate. Final terms may vary upon application completion.',
+                        'TILA lorem ipsum',
                         style: AppTextStyles.bodySmall.copyWith(
                           fontSize: 11,
                           color: AppColors.neutralN500,
@@ -416,7 +416,7 @@ class _OffersSelectionScreenV3State extends State<OffersSelectionScreenV3> {
             padding: const EdgeInsets.symmetric(
                 horizontal: AppSpacing.screenPaddingH),
             child: Text(
-              '* APR shown is the lowest rate available for this product. Your actual APR may vary based on creditworthiness and is subject to change. Final terms will be disclosed upon application completion.',
+              'TILA lorem ipsum',
               style: AppTextStyles.bodySmall.copyWith(
                 fontSize: 11,
                 color: AppColors.neutralN500,
@@ -505,7 +505,7 @@ class _OffersSelectionScreenV3State extends State<OffersSelectionScreenV3> {
                           widget.offers),
                       const SizedBox(height: AppSpacing.lg),
                       Text(
-                        '* APR is dependent based on variable interest rate. Final terms may vary upon application completion.',
+                        'TILA lorem ipsum',
                         style: AppTextStyles.bodySmall.copyWith(
                           fontSize: 11,
                           color: AppColors.neutralN500,

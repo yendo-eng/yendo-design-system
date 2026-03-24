@@ -26,7 +26,7 @@ class CompareOffersScreen extends StatelessWidget {
         CompareOffersScreen.buildComparisonTable(offers),
         const SizedBox(height: AppSpacing.xl),
         Text(
-          '* APR is dependent based on variable interest rate. Credit limits are pre-approved estimates based on your credit profile. Final terms may vary upon application completion.',
+          'TILA lorem ipsum',
           style: AppTextStyles.bodySmall.copyWith(
             fontSize: 11,
             color: AppColors.neutralN500,
@@ -53,7 +53,7 @@ class CompareOffersScreen extends StatelessWidget {
 
     final rows = [
       ComparisonRow(
-        label: 'APR*',
+        label: 'APR',
         values: products.map((o) => o.apr).toList(),
         isHighlightRow: true,
       ),

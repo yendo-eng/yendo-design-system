@@ -172,7 +172,7 @@ class _OffersSelectionScreenState extends State<OffersSelectionScreen> {
                       CompareOffersScreen.buildComparisonTable(widget.offers),
                       const SizedBox(height: AppSpacing.lg),
                       Text(
-                        '* APR is dependent based on variable interest rate. Final terms may vary upon application completion.',
+                        'TILA lorem ipsum',
                         style: AppTextStyles.bodySmall.copyWith(
                           fontSize: 11,
                           color: AppColors.neutralN500,
