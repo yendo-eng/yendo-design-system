@@ -27,6 +27,7 @@ class OfferCardWidget extends StatelessWidget {
     this.showRecommended = false,
     this.showApr = true,
     this.showViewTerms = true,
+    this.showAprBullet = true,
     this.subtitle,
     this.nameOverride,
     this.extraBottomPadding = 0.0,
@@ -51,6 +52,9 @@ class OfferCardWidget extends StatelessWidget {
 
   /// Show the "View terms" link inside the card
   final bool showViewTerms;
+
+  /// Show APR bullet point (default true)
+  final bool showAprBullet;
 
   /// Optional paragraph copy shown below the card name
   final String? subtitle;
@@ -166,7 +170,7 @@ class OfferCardWidget extends StatelessWidget {
                     ...[
                       offer.bulletPoints.first, // Pre-approved up to $X
                       'Cash advance limit ${offer.cashAdvanceLimit}',
-                      'APR ${offer.apr}',
+                      if (showAprBullet) 'APR ${offer.apr}',
                       offer.rewardsLine, // 1.5% rewards on Autopay
                     ].map((point) => Padding(
                           padding: const EdgeInsets.only(bottom: 2),

@@ -112,8 +112,8 @@ class _OffersSelectionScreenBundleState
       backgroundColor: Colors.transparent,
       barrierColor: Colors.black.withValues(alpha: 0.4),
       builder: (_) => DraggableScrollableSheet(
-        initialChildSize: 0.92,
-        minChildSize: 0.5,
+        initialChildSize: 0.55,
+        minChildSize: 0.4,
         maxChildSize: 0.95,
         expand: false,
         builder: (_, scrollController) => Container(
@@ -128,7 +128,7 @@ class _OffersSelectionScreenBundleState
             children: [
               const SizedBox(height: 12),
               Container(
-                width: 36,
+                width: 47,
                 height: 4,
                 decoration: BoxDecoration(
                   color: AppColors.neutralN200,
@@ -148,25 +148,10 @@ class _OffersSelectionScreenBundleState
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const Spacer(),
-                    GestureDetector(
-                      onTap: () => Navigator.of(context).pop(),
-                      child: Container(
-                        width: 32,
-                        height: 32,
-                        decoration: const BoxDecoration(
-                          color: AppColors.neutralN100,
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(Icons.close,
-                            size: 18, color: AppColors.navy),
-                      ),
-                    ),
                   ],
                 ),
               ),
               const SizedBox(height: AppSpacing.md),
-              const Divider(height: 1, color: AppColors.neutralN100),
               Expanded(
                 child: SingleChildScrollView(
                   controller: scrollController,

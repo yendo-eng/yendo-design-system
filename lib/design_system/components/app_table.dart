@@ -337,7 +337,6 @@ class _EmptyHeader extends StatelessWidget {
       decoration: const BoxDecoration(
         color: AppColors.neutralN50,
         border: Border(
-          bottom: BorderSide(color: AppColors.neutralN100, width: 0.5),
           right: BorderSide(color: AppColors.neutralN200, width: 1.5),
         ),
       ),
@@ -366,7 +365,6 @@ class _OptionHeader extends StatelessWidget {
       decoration: BoxDecoration(
         color: isHighlighted ? AppColors.navy : AppColors.neutralN50,
         border: Border(
-          bottom: const BorderSide(color: AppColors.neutralN100, width: 0.5),
           right: isLast
               ? BorderSide.none
               : const BorderSide(color: AppColors.neutralN100, width: 0.5),
@@ -434,7 +432,6 @@ class _LabelCell extends StatelessWidget {
       decoration: BoxDecoration(
         color: isEven ? AppColors.white : AppColors.neutralN50,
         border: const Border(
-          bottom: BorderSide(color: AppColors.neutralN100, width: 0.5),
           right: BorderSide(color: AppColors.neutralN200, width: 1.5),
         ),
       ),
@@ -511,7 +508,6 @@ class _ValueCell extends StatelessWidget {
       decoration: BoxDecoration(
         color: bgColor,
         border: Border(
-          bottom: const BorderSide(color: AppColors.neutralN100, width: 0.5),
           right: isLast
               ? BorderSide.none
               : const BorderSide(color: AppColors.neutralN100, width: 0.5),
