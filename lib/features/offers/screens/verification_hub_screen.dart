@@ -405,18 +405,7 @@ class _StepItem extends StatelessWidget {
                         width: isActive ? 2 : 1.5,
                       ),
                     ),
-                    child: isActive
-                        ? Center(
-                            child: Container(
-                              width: 8,
-                              height: 8,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppColors.navy,
-                              ),
-                            ),
-                          )
-                        : null,
+                    child: null,
                   ),
 
                   // Outgoing connector line to next item
@@ -451,7 +440,7 @@ class _StepItem extends StatelessWidget {
                           Text(
                             label,
                             style: AppTextStyles.bodyRegular.copyWith(
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.w500,
                               fontSize: 15,
                               color: isActive
                                   ? AppColors.navy
