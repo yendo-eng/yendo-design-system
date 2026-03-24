@@ -53,11 +53,11 @@ class CompareOffersScreen extends StatelessWidget {
         values: products.map((o) => o.creditLimit).toList(),
       ),
       ComparisonRow(
-        label: 'Cash Advance\nLimit',
+        label: 'Daily cash\nadvance limit',
         values: products.map((o) => o.cashAdvanceLimit).toList(),
       ),
       ComparisonRow(
-        label: 'Value Props\n(Perks and\nBenefits)',
+        label: 'Rewards',
         values: products.map((o) => o.rewardsLine).toList(),
       ),
     ];

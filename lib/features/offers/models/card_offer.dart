@@ -88,7 +88,7 @@ class YendoOffers {
     name: 'Flex Preferred Rewards',
     description: 'No collateral needed. Build your credit and earn rewards with our flexible unsecured card.',
     creditLimit: r'$750',
-    apr: '29.88%*',
+    apr: '28.99-35.99%',
     cashAdvanceLimit: r'$400',
     imagePath: 'assets/images/Unsecured.svg',
     bulletPoints: ['Pre-approved up to \$750', '1.5% rewards on Autopay'],

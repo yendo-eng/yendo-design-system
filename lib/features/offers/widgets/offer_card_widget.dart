@@ -29,6 +29,8 @@ class OfferCardWidget extends StatelessWidget {
     this.showViewTerms = true,
     this.subtitle,
     this.nameOverride,
+    this.extraBottomPadding = 0.0,
+    this.imageScale = 1.0,
   });
 
   final CardOffer offer;
@@ -55,6 +57,12 @@ class OfferCardWidget extends StatelessWidget {
 
   /// Override the displayed card name (e.g. for bundle variants)
   final String? nameOverride;
+
+  /// Extra padding added to the bottom of the card content (makes card taller)
+  final double extraBottomPadding;
+
+  /// Scale applied to the card image size (1.0 = default 80×56, 0.85 = 68×48)
+  final double imageScale;
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +100,12 @@ class OfferCardWidget extends StatelessWidget {
                   ),
                 ],
         ),
-        padding: const EdgeInsets.all(AppSpacing.md),
+        padding: EdgeInsets.fromLTRB(
+          AppSpacing.md,
+          AppSpacing.md,
+          AppSpacing.md,
+          AppSpacing.md + extraBottomPadding,
+        ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -235,8 +248,8 @@ class OfferCardWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
               child: SvgPicture.asset(
                 offer.imagePath,
-                width: 80,
-                height: 56,
+                width: 80 * imageScale,
+                height: 56 * imageScale,
                 fit: BoxFit.cover,
               ),
             ),
