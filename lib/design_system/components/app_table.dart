@@ -307,7 +307,7 @@ class AppComparisonTable extends StatelessWidget {
 
   Widget _buildFixed(double labelWidth) {
     return Table(
-      defaultVerticalAlignment: TableCellVerticalAlignment.top,
+      defaultVerticalAlignment: TableCellVerticalAlignment.fill,
       columnWidths: {
         0: FixedColumnWidth(labelWidth),
         for (int i = 1; i <= options.length; i++)
@@ -412,12 +412,13 @@ class _OptionColumn extends StatelessWidget {
 
 class _EmptyHeader extends StatelessWidget {
   const _EmptyHeader({required this.height});
+  // height kept for API compatibility — cell now fills row height via fill alignment
   final double height;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height,
+      height: double.infinity,
       color: AppColors.neutralN50,
     );
   }
@@ -440,9 +441,10 @@ class _OptionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: double.infinity,
       alignment: Alignment.center,
       color: isHighlighted ? AppColors.navy : AppColors.neutralN50,
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
@@ -500,8 +502,9 @@ class _LabelCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-      color: isEven ? AppColors.primaryO50 : AppColors.neutralN50,
+      color: isEven ? AppColors.white : AppColors.neutralN50,
       alignment: Alignment.topLeft,
       child: Row(
         children: [
@@ -549,7 +552,7 @@ class _ValueCell extends StatelessWidget {
         ? (isEven
             ? AppColors.navy.withOpacity(0.06)
             : AppColors.navy.withOpacity(0.10))
-        : (isEven ? AppColors.primaryO50 : AppColors.neutralN50);
+        : (isEven ? AppColors.white : AppColors.neutralN50);
 
     Widget child;
     final lower = value.toLowerCase().trim();
@@ -571,6 +574,7 @@ class _ValueCell extends StatelessWidget {
     }
 
     return Container(
+      height: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       color: bgColor,
       alignment: Alignment.topCenter,
