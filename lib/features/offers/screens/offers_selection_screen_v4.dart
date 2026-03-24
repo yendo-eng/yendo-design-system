@@ -36,7 +36,11 @@ class _OffersSelectionScreenV4State extends State<OffersSelectionScreenV4> {
         showStatusBar: true,
         contentBackgroundColor: Colors.transparent,
         contentPadding: 0,
-        appBar: AppNavBar.logo(backgroundColor: Colors.transparent, height: 46),
+        appBar: AppNavBar.logo(
+          backgroundColor: Colors.transparent,
+          height: 46,
+          onBack: () => Navigator.of(context).pop(),
+        ),
         hasStickyFooter: true,
         footer: AppStickyBottomBar(
           primaryLabel: 'Continue to application',
