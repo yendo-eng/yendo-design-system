@@ -96,7 +96,7 @@ class _OffersSelectionScreenV4State extends State<OffersSelectionScreenV4> {
                   showRecommended: e.key == 0,
                   showApr: false,
                   showViewTerms: false,
-                  extraBottomPadding: AppSpacing.md,
+                  extraBottomPadding: 12.0,
                   imageScale: 0.85,
                 ),
               )),
