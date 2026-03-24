@@ -98,36 +98,8 @@ class FpoApplicationScreen extends StatelessWidget {
         const SizedBox(height: AppSpacing.sm),
 
         _OutcomeButton(
-          label: '🎨  Auto Refi as Bundle',
-          sublabel: 'Option A + bundled value prop on first card',
-          color: AppColors.blue400,
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => OffersSelectionScreenBundle(offers: allOffers),
-            ),
-          ),
-        ),
-
-        const SizedBox(height: AppSpacing.sm),
-
-        _OutcomeButton(
-          label: '🎨  Option A — Multiple offers',
-          sublabel: 'Rejection style · big number cards · 3 offers',
-          color: AppColors.blue400,
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => OffersSelectionScreenV3(offers: allOffers),
-            ),
-          ),
-        ),
-
-        const SizedBox(height: AppSpacing.sm),
-
-        _OutcomeButton(
-          label: '🎨  Option D — Multiple offers',
-          sublabel: 'No APR · compare link above cards · terms in footer',
+          label: '🎨  Option A — Credit Emphasis - no APR',
+          sublabel: 'Credit limit hero · no APR · centered view terms',
           color: AppColors.blue400,
           onTap: () => Navigator.push(
             context,
@@ -161,6 +133,34 @@ class FpoApplicationScreen extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (_) => OffersSelectionScreenV2(offers: allOffers),
+            ),
+          ),
+        ),
+
+        const SizedBox(height: AppSpacing.sm),
+
+        _OutcomeButton(
+          label: '🎨  Option D — Multiple offers',
+          sublabel: 'Rejection style · big number cards · 3 offers',
+          color: AppColors.blue400,
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => OffersSelectionScreenV3(offers: allOffers),
+            ),
+          ),
+        ),
+
+        const SizedBox(height: AppSpacing.sm),
+
+        _OutcomeButton(
+          label: '🎨  Auto Refi as Bundle',
+          sublabel: 'Option D + bundled value prop on first card',
+          color: AppColors.blue400,
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => OffersSelectionScreenBundle(offers: allOffers),
             ),
           ),
         ),
