@@ -85,6 +85,7 @@ class _OffersSelectionScreenState extends State<OffersSelectionScreen> {
                   onTap: () => setState(() => _selectedOffer = offer),
                   showBulletPoints: true,
                   showAprBullet: false,
+                  showRewardsBullet: index == 0,
                   showViewTerms: false,
                   showRecommended: index == 0,
                 ),
