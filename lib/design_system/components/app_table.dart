@@ -423,10 +423,10 @@ class _EmptyHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        color: AppColors.neutralN50,
+        color: AppColors.neutralN100,
         border: Border(
-          bottom: BorderSide(color: AppColors.neutralN100, width: 0.5),
-          right: BorderSide(color: AppColors.neutralN100, width: 0.5),
+          bottom: BorderSide(color: AppColors.neutralN200, width: 0.5),
+          right: BorderSide(color: AppColors.neutralN200, width: 1.5),
         ),
       ),
     );
@@ -518,15 +518,15 @@ class _LabelCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
       decoration: BoxDecoration(
         color: isEven ? AppColors.white : AppColors.neutralN50,
         border: const Border(
           bottom: BorderSide(color: AppColors.neutralN100, width: 0.5),
-          right: BorderSide(color: AppColors.neutralN100, width: 0.5),
+          right: BorderSide(color: AppColors.neutralN200, width: 1.5),
         ),
       ),
-      alignment: Alignment.topLeft,
+      alignment: Alignment.centerLeft,
       child: Row(
         children: [
           if (icon != null) ...[
@@ -595,7 +595,7 @@ class _ValueCell extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 14),
       decoration: BoxDecoration(
         color: bgColor,
         border: Border(
@@ -605,7 +605,7 @@ class _ValueCell extends StatelessWidget {
               : const BorderSide(color: AppColors.neutralN100, width: 0.5),
         ),
       ),
-      alignment: Alignment.topCenter,
+      alignment: Alignment.center,
       child: child,
     );
   }
