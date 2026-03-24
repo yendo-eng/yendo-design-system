@@ -426,8 +426,8 @@ class _StepItem extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: EdgeInsets.only(
-                  top: 14,
-                  bottom: isLast ? 18 : 16,
+                  top: 13,
+                  bottom: isLast ? 17 : 15,
                   left: 4,
                 ),
                 child: Row(
