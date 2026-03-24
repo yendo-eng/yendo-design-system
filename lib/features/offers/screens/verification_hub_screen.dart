@@ -22,6 +22,7 @@ class VerificationHubScreen extends StatelessWidget {
       hasStickyFooter: true,
       footer: AppStickyBottomBar(
         primaryLabel: 'Continue to asset details',
+        primaryVariant: AppButtonVariant.alternate,
         onPrimary: () {},
         backgroundColor: AppColors.white,
         showTopDivider: false,
