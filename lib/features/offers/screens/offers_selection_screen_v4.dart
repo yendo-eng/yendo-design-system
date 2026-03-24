@@ -108,20 +108,6 @@ class _OffersSelectionScreenV4State extends State<OffersSelectionScreenV4> {
                 ),
               )),
 
-          // ── TILA disclaimer ─────────────────────────────
-          Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.screenPaddingH),
-            child: Text(
-              'TILA lorem ipsum',
-              style: AppTextStyles.bodySmall.copyWith(
-                fontSize: 11,
-                color: AppColors.neutralN500,
-                height: 1.5,
-              ),
-            ),
-          ),
-
           const SizedBox(height: AppSpacing.xl),
         ],
       ),
@@ -256,14 +242,6 @@ class _OffersSelectionScreenV4State extends State<OffersSelectionScreenV4> {
                       const SizedBox(height: AppSpacing.xs),
                       CompareOffersScreen.buildComparisonTable(widget.offers),
                       const SizedBox(height: AppSpacing.lg),
-                      Text(
-                        'TILA lorem ipsum',
-                        style: AppTextStyles.bodySmall.copyWith(
-                          fontSize: 11,
-                          color: AppColors.neutralN500,
-                          height: 1.5,
-                        ),
-                      ),
                       const SizedBox(height: AppSpacing.xl),
                     ],
                   ),

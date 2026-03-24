@@ -200,14 +200,6 @@ class _OffersSelectionScreenV2State extends State<OffersSelectionScreenV2> {
                       const SizedBox(height: AppSpacing.xs),
                       CompareOffersScreen.buildComparisonTable(widget.offers),
                       const SizedBox(height: AppSpacing.lg),
-                      Text(
-                        'TILA lorem ipsum',
-                        style: AppTextStyles.bodySmall.copyWith(
-                          fontSize: 11,
-                          color: AppColors.neutralN500,
-                          height: 1.5,
-                        ),
-                      ),
                       const SizedBox(height: AppSpacing.xl),
                     ],
                   ),
@@ -411,20 +403,6 @@ class _OffersSelectionScreenV3State extends State<OffersSelectionScreenV3> {
                 ),
               )),
 
-          // ── APR asterisk disclaimer ─────────────────────
-          Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.screenPaddingH),
-            child: Text(
-              'TILA lorem ipsum',
-              style: AppTextStyles.bodySmall.copyWith(
-                fontSize: 11,
-                color: AppColors.neutralN500,
-                height: 1.5,
-              ),
-            ),
-          ),
-
           const SizedBox(height: AppSpacing.xl),
         ],
       ),
@@ -504,14 +482,6 @@ class _OffersSelectionScreenV3State extends State<OffersSelectionScreenV3> {
                       CompareOffersScreen.buildComparisonTable(
                           widget.offers),
                       const SizedBox(height: AppSpacing.lg),
-                      Text(
-                        'TILA lorem ipsum',
-                        style: AppTextStyles.bodySmall.copyWith(
-                          fontSize: 11,
-                          color: AppColors.neutralN500,
-                          height: 1.5,
-                        ),
-                      ),
                       const SizedBox(height: AppSpacing.xl),
                     ],
                   ),

@@ -25,15 +25,6 @@ class CompareOffersScreen extends StatelessWidget {
         const SizedBox(height: AppSpacing.sm),
         CompareOffersScreen.buildComparisonTable(offers),
         const SizedBox(height: AppSpacing.xl),
-        Text(
-          'TILA lorem ipsum',
-          style: AppTextStyles.bodySmall.copyWith(
-            fontSize: 11,
-            color: AppColors.neutralN500,
-            height: 1.5,
-          ),
-        ),
-        const SizedBox(height: AppSpacing.xl),
       ],
     );
   }
