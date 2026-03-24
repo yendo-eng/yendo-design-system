@@ -9,6 +9,7 @@ import 'offers_selection_screen.dart';
 import 'offers_selection_screen_v2.dart';
 import 'verification_hub_screen.dart';
 import 'offers_selection_screen_bundle.dart';
+import 'offers_selection_screen_v4.dart';
 
 /// Application Funnel — navigation hub for all design explorations
 /// and funnel simulation outcomes.
@@ -118,6 +119,20 @@ class FpoApplicationScreen extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (_) => OffersSelectionScreenV3(offers: allOffers),
+            ),
+          ),
+        ),
+
+        const SizedBox(height: AppSpacing.sm),
+
+        _OutcomeButton(
+          label: '🎨  Option D — Multiple offers',
+          sublabel: 'No APR · compare link above cards · terms in footer',
+          color: AppColors.blue400,
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => OffersSelectionScreenV4(offers: allOffers),
             ),
           ),
         ),

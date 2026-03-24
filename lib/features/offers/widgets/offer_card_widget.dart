@@ -25,6 +25,8 @@ class OfferCardWidget extends StatelessWidget {
     this.showCreditLimit = false,
     this.showBulletPoints = true,
     this.showRecommended = false,
+    this.showApr = true,
+    this.showViewTerms = true,
     this.subtitle,
     this.nameOverride,
   });
@@ -41,6 +43,12 @@ class OfferCardWidget extends StatelessWidget {
 
   /// Show the "Recommended" pill badge above the card name
   final bool showRecommended;
+
+  /// Show APR row inside the card (only applies when showCreditLimit is true)
+  final bool showApr;
+
+  /// Show the "View terms" link inside the card
+  final bool showViewTerms;
 
   /// Optional paragraph copy shown below the card name
   final String? subtitle;
@@ -186,32 +194,36 @@ class OfferCardWidget extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'APR ${offer.apr}',
-                      style: AppTextStyles.bodySmall.copyWith(
-                        color: AppColors.neutralN500,
-                        fontSize: 13,
+                    if (showApr) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        'APR ${offer.apr}',
+                        style: AppTextStyles.bodySmall.copyWith(
+                          color: AppColors.neutralN500,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ],
+
+                  if (showViewTerms) ...[
+                    const SizedBox(height: AppSpacing.sm),
+
+                    // View terms link
+                    GestureDetector(
+                      onTap: () => _showTerms(context),
+                      child: Text(
+                        'View terms',
+                        style: AppTextStyles.bodySmall.copyWith(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12,
+                          color: AppColors.contentDisabled,
+                          decoration: TextDecoration.underline,
+                          decorationColor: AppColors.contentDisabled,
+                        ),
                       ),
                     ),
                   ],
-
-                  const SizedBox(height: AppSpacing.sm),
-
-                  // View terms link
-                  GestureDetector(
-                    onTap: () => _showTerms(context),
-                    child: Text(
-                      'View terms',
-                      style: AppTextStyles.bodySmall.copyWith(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 12,
-                        color: AppColors.contentDisabled,
-                        decoration: TextDecoration.underline,
-                        decorationColor: AppColors.contentDisabled,
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
