@@ -42,11 +42,9 @@ class _OffersSelectionScreenV4State extends State<OffersSelectionScreenV4> {
           primaryLabel: 'Continue to application',
           onPrimary:
               _selectedOffer != null ? () => _onContinue(context) : null,
-          secondaryLabel: 'View terms',
+          secondaryLabel: 'Compare offers',
           secondaryVariant: AppButtonVariant.link,
-          onSecondary: _selectedOffer != null
-              ? () => _showTermsSheet(context, _selectedOffer!)
-              : () => _showTermsSheet(context, widget.offers.first),
+          onSecondary: () => _showCompareSheet(context),
           backgroundColor: AppColors.white,
         ),
         content: [
@@ -76,22 +74,6 @@ class _OffersSelectionScreenV4State extends State<OffersSelectionScreenV4> {
           ),
 
           const SizedBox(height: AppSpacing.lg),
-
-          // ── Compare offers link — right-aligned, tight above cards ──
-          Padding(
-            padding: const EdgeInsets.only(
-              right: AppSpacing.screenPaddingH,
-              bottom: AppSpacing.xs,
-            ),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: AppButton(
-                label: 'Compare offers',
-                variant: AppButtonVariant.link,
-                onPressed: () => _showCompareSheet(context),
-              ),
-            ),
-          ),
 
           // ── Offer cards — no APR, no View terms ─────────
           ...widget.offers.asMap().entries.map((e) => Padding(
