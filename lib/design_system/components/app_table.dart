@@ -265,7 +265,7 @@ class AppComparisonTable extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _EmptyHeader(height: headerHeight),
+              const _EmptyHeader(),
               ...rows.asMap().entries.map((e) => _LabelCell(
                     label: e.value.label,
                     icon: e.value.labelIcon,
@@ -303,54 +303,60 @@ class AppComparisonTable extends StatelessWidget {
     );
   }
 
-  // ── Fixed: Flutter Table widget — guarantees equal row heights ─
+  // ── Fixed: IntrinsicHeight rows — cells in each row always match height ──
 
   Widget _buildFixed(double labelWidth) {
-    return Table(
-      defaultVerticalAlignment: TableCellVerticalAlignment.fill,
-      columnWidths: {
-        0: FixedColumnWidth(labelWidth),
-        for (int i = 1; i <= options.length; i++)
-          i: const FlexColumnWidth(),
-      },
-      border: TableBorder.all(
-        color: AppColors.neutralN100,
-        width: 0.5,
-      ),
+    return Column(
       children: [
         // Header row
-        TableRow(
-          children: [
-            // Empty top-left cell — use same height anchor as option headers
-            _EmptyHeader(height: headerHeight),
-            for (int i = 0; i < options.length; i++)
-              _OptionHeader(
-                label: options[i],
-                isHighlighted: i == highlightColumn,
-                badgeLabel: showBadge && i == highlightColumn ? highlightLabel : null,
-              ),
-          ],
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(width: labelWidth, child: const _EmptyHeader()),
+              for (int i = 0; i < options.length; i++)
+                Expanded(
+                  child: _OptionHeader(
+                    label: options[i],
+                    isHighlighted: i == highlightColumn,
+                    badgeLabel: showBadge && i == highlightColumn
+                        ? highlightLabel
+                        : null,
+                    isLast: i == options.length - 1,
+                  ),
+                ),
+            ],
+          ),
         ),
         // Data rows
         for (int rowIndex = 0; rowIndex < rows.length; rowIndex++)
-          TableRow(
-            children: [
-              _LabelCell(
-                label: rows[rowIndex].label,
-                icon: rows[rowIndex].labelIcon,
-                isEven: rowIndex.isEven,
-                isHighlightRow: rows[rowIndex].isHighlightRow,
-              ),
-              for (int c = 0; c < options.length; c++)
-                _ValueCell(
-                  value: c < rows[rowIndex].values.length
-                      ? rows[rowIndex].values[c]
-                      : '—',
-                  isHighlighted: c == highlightColumn,
-                  isEven: rowIndex.isEven,
-                  isHighlightRow: rows[rowIndex].isHighlightRow,
+          IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SizedBox(
+                  width: labelWidth,
+                  child: _LabelCell(
+                    label: rows[rowIndex].label,
+                    icon: rows[rowIndex].labelIcon,
+                    isEven: rowIndex.isEven,
+                    isHighlightRow: rows[rowIndex].isHighlightRow,
+                  ),
                 ),
-            ],
+                for (int c = 0; c < options.length; c++)
+                  Expanded(
+                    child: _ValueCell(
+                      value: c < rows[rowIndex].values.length
+                          ? rows[rowIndex].values[c]
+                          : '—',
+                      isHighlighted: c == highlightColumn,
+                      isEven: rowIndex.isEven,
+                      isHighlightRow: rows[rowIndex].isHighlightRow,
+                      isLast: c == options.length - 1,
+                    ),
+                  ),
+              ],
+            ),
           ),
       ],
     );
@@ -411,15 +417,18 @@ class _OptionColumn extends StatelessWidget {
 // ─────────────────────────────────────────────────────────────────────────────
 
 class _EmptyHeader extends StatelessWidget {
-  const _EmptyHeader({required this.height});
-  // height kept for API compatibility — cell now fills row height via fill alignment
-  final double height;
+  const _EmptyHeader();
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: double.infinity,
-      color: AppColors.neutralN50,
+      decoration: const BoxDecoration(
+        color: AppColors.neutralN50,
+        border: Border(
+          bottom: BorderSide(color: AppColors.neutralN100, width: 0.5),
+          right: BorderSide(color: AppColors.neutralN100, width: 0.5),
+        ),
+      ),
     );
   }
 }
@@ -441,9 +450,16 @@ class _OptionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: double.infinity,
       alignment: Alignment.center,
-      color: isHighlighted ? AppColors.navy : AppColors.neutralN50,
+      decoration: BoxDecoration(
+        color: isHighlighted ? AppColors.navy : AppColors.neutralN50,
+        border: Border(
+          bottom: const BorderSide(color: AppColors.neutralN100, width: 0.5),
+          right: isLast
+              ? BorderSide.none
+              : const BorderSide(color: AppColors.neutralN100, width: 0.5),
+        ),
+      ),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -502,9 +518,14 @@ class _LabelCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-      color: isEven ? AppColors.white : AppColors.neutralN50,
+      decoration: BoxDecoration(
+        color: isEven ? AppColors.white : AppColors.neutralN50,
+        border: const Border(
+          bottom: BorderSide(color: AppColors.neutralN100, width: 0.5),
+          right: BorderSide(color: AppColors.neutralN100, width: 0.5),
+        ),
+      ),
       alignment: Alignment.topLeft,
       child: Row(
         children: [
@@ -574,9 +595,16 @@ class _ValueCell extends StatelessWidget {
     }
 
     return Container(
-      height: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-      color: bgColor,
+      decoration: BoxDecoration(
+        color: bgColor,
+        border: Border(
+          bottom: const BorderSide(color: AppColors.neutralN100, width: 0.5),
+          right: isLast
+              ? BorderSide.none
+              : const BorderSide(color: AppColors.neutralN100, width: 0.5),
+        ),
+      ),
       alignment: Alignment.topCenter,
       child: child,
     );
