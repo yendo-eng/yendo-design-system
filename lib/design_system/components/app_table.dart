@@ -229,8 +229,74 @@ class AppComparisonTable extends StatelessWidget {
         final screenWidth = constraints.maxWidth;
         final labelWidth = columnCount.labelWidth(screenWidth);
         final optionWidth = columnCount.optionWidth(screenWidth);
-        final totalContentWidth = labelWidth + (optionWidth * columnCount.count);
+        final totalContentWidth =
+            labelWidth + (optionWidth * columnCount.count);
         final needsScroll = totalContentWidth > screenWidth;
+
+        // Build all rows using IntrinsicHeight so label + value cells in the
+        // same row are always identical height regardless of content.
+        // When wider than container, wrap the entire table in a horizontal
+        // SingleChildScrollView — this keeps every row intact.
+        Widget buildRow({
+          required Widget labelCell,
+          required List<Widget> valueCells,
+        }) {
+          return IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SizedBox(width: labelWidth, child: labelCell),
+                ...valueCells.asMap().entries.map(
+                      (e) => needsScroll
+                          ? SizedBox(width: optionWidth, child: e.value)
+                          : Expanded(child: e.value),
+                    ),
+              ],
+            ),
+          );
+        }
+
+        final table = Column(
+          children: [
+            // Header row
+            buildRow(
+              labelCell: const _EmptyHeader(),
+              valueCells: [
+                for (int i = 0; i < options.length; i++)
+                  _OptionHeader(
+                    label: options[i],
+                    isHighlighted: i == highlightColumn,
+                    badgeLabel: showBadge && i == highlightColumn
+                        ? highlightLabel
+                        : null,
+                    isLast: i == options.length - 1,
+                  ),
+              ],
+            ),
+            // Data rows
+            for (int rowIndex = 0; rowIndex < rows.length; rowIndex++)
+              buildRow(
+                labelCell: _LabelCell(
+                  label: rows[rowIndex].label,
+                  icon: rows[rowIndex].labelIcon,
+                  isEven: rowIndex.isEven,
+                  isHighlightRow: rows[rowIndex].isHighlightRow,
+                ),
+                valueCells: [
+                  for (int c = 0; c < options.length; c++)
+                    _ValueCell(
+                      value: c < rows[rowIndex].values.length
+                          ? rows[rowIndex].values[c]
+                          : '—',
+                      isHighlighted: c == highlightColumn,
+                      isEven: rowIndex.isEven,
+                      isHighlightRow: rows[rowIndex].isHighlightRow,
+                      isLast: c == options.length - 1,
+                    ),
+                ],
+              ),
+          ],
+        );
 
         return Container(
           decoration: BoxDecoration(
@@ -246,171 +312,17 @@ class AppComparisonTable extends StatelessWidget {
           ),
           clipBehavior: Clip.antiAlias,
           child: needsScroll
-              ? _buildScrollable(labelWidth, optionWidth)
-              : _buildFixed(labelWidth),
+              ? SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: table,
+                )
+              : table,
         );
       },
     );
   }
-
-  // ── Scrollable: label column pinned, options scroll ────────
-
-  Widget _buildScrollable(double labelWidth, double optionWidth) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Pinned label column
-        SizedBox(
-          width: labelWidth,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const _EmptyHeader(),
-              ...rows.asMap().entries.map((e) => _LabelCell(
-                    label: e.value.label,
-                    icon: e.value.labelIcon,
-                    isEven: e.key.isEven,
-                    isHighlightRow: e.value.isHighlightRow,
-                  )),
-            ],
-          ),
-        ),
-        // Scrollable option columns
-        Expanded(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: options.asMap().entries.map((entry) {
-                return SizedBox(
-                  width: optionWidth,
-                  child: _OptionColumn(
-                    label: entry.value,
-                    colIndex: entry.key,
-                    rows: rows,
-                    highlightColumn: highlightColumn,
-                    highlightLabel: highlightLabel,
-                    showBadge: showBadge,
-                    headerHeight: headerHeight,
-                    isLast: entry.key == options.length - 1,
-                  ),
-                );
-              }).toList(),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  // ── Fixed: IntrinsicHeight rows — cells in each row always match height ──
-
-  Widget _buildFixed(double labelWidth) {
-    return Column(
-      children: [
-        // Header row
-        IntrinsicHeight(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(width: labelWidth, child: const _EmptyHeader()),
-              for (int i = 0; i < options.length; i++)
-                Expanded(
-                  child: _OptionHeader(
-                    label: options[i],
-                    isHighlighted: i == highlightColumn,
-                    badgeLabel: showBadge && i == highlightColumn
-                        ? highlightLabel
-                        : null,
-                    isLast: i == options.length - 1,
-                  ),
-                ),
-            ],
-          ),
-        ),
-        // Data rows
-        for (int rowIndex = 0; rowIndex < rows.length; rowIndex++)
-          IntrinsicHeight(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(
-                  width: labelWidth,
-                  child: _LabelCell(
-                    label: rows[rowIndex].label,
-                    icon: rows[rowIndex].labelIcon,
-                    isEven: rowIndex.isEven,
-                    isHighlightRow: rows[rowIndex].isHighlightRow,
-                  ),
-                ),
-                for (int c = 0; c < options.length; c++)
-                  Expanded(
-                    child: _ValueCell(
-                      value: c < rows[rowIndex].values.length
-                          ? rows[rowIndex].values[c]
-                          : '—',
-                      isHighlighted: c == highlightColumn,
-                      isEven: rowIndex.isEven,
-                      isHighlightRow: rows[rowIndex].isHighlightRow,
-                      isLast: c == options.length - 1,
-                    ),
-                  ),
-              ],
-            ),
-          ),
-      ],
-    );
-  }
 }
 
-// ── Option column widget (used in scrollable mode) ──────────
-
-class _OptionColumn extends StatelessWidget {
-  const _OptionColumn({
-    required this.label,
-    required this.colIndex,
-    required this.rows,
-    required this.highlightColumn,
-    required this.highlightLabel,
-    required this.showBadge,
-    required this.headerHeight,
-    required this.isLast,
-  });
-
-  final String label;
-  final int colIndex;
-  final List<ComparisonRow> rows;
-  final int? highlightColumn;
-  final String highlightLabel;
-  final bool showBadge;
-  final double headerHeight;
-  final bool isLast;
-
-  bool get _isHighlighted => colIndex == highlightColumn;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _OptionHeader(
-          label: label,
-          isHighlighted: _isHighlighted,
-          badgeLabel: showBadge && _isHighlighted ? highlightLabel : null,
-          isLast: isLast,
-        ),
-        ...rows.asMap().entries.map((rowEntry) => _ValueCell(
-              value: colIndex < rowEntry.value.values.length
-                  ? rowEntry.value.values[colIndex]
-                  : '—',
-              isHighlighted: _isHighlighted,
-              isEven: rowEntry.key.isEven,
-              isHighlightRow: rowEntry.value.isHighlightRow,
-              isLast: isLast,
-            )),
-      ],
-    );
-  }
-}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Shared cell widgets
