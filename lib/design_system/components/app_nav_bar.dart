@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../colors.dart';
 import '../typography.dart';
 
@@ -26,8 +27,25 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
     this.onClose,
     this.showBackButton = true,
     this.showCloseOnly = false,
+    this.showLogo = false,
     this.backgroundColor = AppColors.white,
+    this.height = 50,
   });
+
+  /// Named constructor for the logo variant.
+  ///
+  /// Without [onBack]: logo sits flush left (brand header — first screen).
+  /// With [onBack]:    logo is centred, back button on the left (mid-funnel).
+  const AppNavBar.logo({
+    super.key,
+    this.onBack,
+    this.onClose,
+    this.backgroundColor = Colors.transparent,
+    this.height = 50,
+  })  : title = null,
+        showBackButton = false,
+        showCloseOnly = false,
+        showLogo = true;
 
   /// Centered title text
   final String? title;
@@ -45,47 +63,59 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
   /// Use on the very first screen of a funnel.
   final bool showCloseOnly;
 
+  /// When true, shows the Yendo orange logo on the left instead of a back button.
+  final bool showLogo;
+
   final Color backgroundColor;
+  final double height;
 
   @override
-  Size get preferredSize => const Size.fromHeight(56);
+  Size get preferredSize => Size.fromHeight(height);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 56,
+      height: height,
       color: backgroundColor,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
-          // ── Left: Back button or spacer ─────────────────
+          // ── Left ────────────────────────────────────────
           SizedBox(
             width: 40,
-            child: (!showCloseOnly && showBackButton && onBack != null)
-                ? AppBackButton(onPressed: onBack!)
+            child: !showCloseOnly && showBackButton && onBack != null
+                ? AppBackButton(onPressed: onBack)
                 : const SizedBox.shrink(),
           ),
 
-          // ── Center: Title ────────────────────────────────
+          // ── Center ───────────────────────────────────────
           Expanded(
-            child: title != null
+            child: showLogo
+                // Logo centred (works for both back+logo and logo-only)
                 ? Center(
-                    child: Text(
-                      title!,
-                      style: AppTextStyles.bodyRegular.copyWith(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16,
-                        height: 1.5,
-                      ),
-                      textAlign: TextAlign.center,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                    child: SvgPicture.asset(
+                      'assets/svgs/logos/logo_orange.svg',
+                      height: 18,
                     ),
                   )
-                : const SizedBox.shrink(),
+                : title != null
+                    ? Center(
+                        child: Text(
+                          title!,
+                          style: AppTextStyles.bodyRegular.copyWith(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                            height: 1.5,
+                          ),
+                          textAlign: TextAlign.center,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      )
+                    : const SizedBox.shrink(),
           ),
 
-          // ── Right: Close button or spacer ────────────────
+          // ── Right ────────────────────────────────────────
           SizedBox(
             width: 40,
             child: onClose != null
@@ -115,15 +145,15 @@ class AppBackButton extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed ?? () => Navigator.of(context).maybePop(),
       child: Container(
-        width: 40,
-        height: 40,
+        width: 36,
+        height: 36,
         decoration: const BoxDecoration(
           color: AppColors.neutralN75,
           shape: BoxShape.circle,
         ),
         child: const Icon(
           Icons.chevron_left_rounded,
-          size: 24,
+          size: 22,
           color: AppColors.navy,
         ),
       ),

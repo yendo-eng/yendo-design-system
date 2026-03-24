@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'design_system/design_system.dart';
+import 'features/offers/screens/fpo_application_screen.dart';
+import 'features/offers/models/card_offer.dart';
 
 void main() {
   runApp(const DesignSystemApp());
@@ -17,15 +19,18 @@ class DesignSystemApp extends StatelessWidget {
         scaffoldBackgroundColor: AppColors.neutralN50,
         fontFamily: 'PPNeueMontreal',
       ),
-      home: const _ShowcaseHome(),
+      home: FpoApplicationScreen(
+        selectedOffer: YendoOffers.all.first,
+        allOffers: YendoOffers.all,
+      ),
     );
   }
 }
 
 // ── Home: component list ────────────────────────────────────
 
-class _ShowcaseHome extends StatelessWidget {
-  const _ShowcaseHome();
+class ShowcaseHome extends StatelessWidget {
+  const ShowcaseHome();
 
   @override
   Widget build(BuildContext context) {
@@ -104,6 +109,19 @@ class _ShowcaseHome extends StatelessWidget {
                 label: '✨ Full Funnel Example',
                 icon: Icons.account_tree_outlined,
                 onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const _FunnelStep1())),
+              ),
+              _ComponentTile(
+                label: '🃏 Card Offers Flow',
+                icon: Icons.credit_card_outlined,
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => FpoApplicationScreen(
+                      selectedOffer: YendoOffers.all.first,
+                      allOffers: YendoOffers.all,
+                    ),
+                  ),
+                ),
               ),
 
               const SizedBox(height: 40),

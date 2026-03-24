@@ -303,58 +303,54 @@ class AppComparisonTable extends StatelessWidget {
     );
   }
 
-  // ── Fixed: all columns share available width equally ───────
+  // ── Fixed: Flutter Table widget — guarantees equal row heights ─
 
   Widget _buildFixed(double labelWidth) {
-    return Column(
+    return Table(
+      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      columnWidths: {
+        0: FixedColumnWidth(labelWidth),
+        for (int i = 1; i <= options.length; i++)
+          i: const FlexColumnWidth(),
+      },
+      border: TableBorder.all(
+        color: AppColors.neutralN100,
+        width: 0.5,
+      ),
       children: [
         // Header row
-        IntrinsicHeight(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(width: labelWidth, child: _EmptyHeader(height: headerHeight)),
-              for (int i = 0; i < options.length; i++)
-                Expanded(
-                  child: _OptionHeader(
-                    label: options[i],
-                    isHighlighted: i == highlightColumn,
-                    badgeLabel: showBadge && i == highlightColumn ? highlightLabel : null,
-                    isLast: i == options.length - 1,
-                  ),
-                ),
-            ],
-          ),
+        TableRow(
+          children: [
+            // Empty top-left cell — use same height anchor as option headers
+            _EmptyHeader(height: headerHeight),
+            for (int i = 0; i < options.length; i++)
+              _OptionHeader(
+                label: options[i],
+                isHighlighted: i == highlightColumn,
+                badgeLabel: showBadge && i == highlightColumn ? highlightLabel : null,
+              ),
+          ],
         ),
         // Data rows
         for (int rowIndex = 0; rowIndex < rows.length; rowIndex++)
-          IntrinsicHeight(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(
-                  width: labelWidth,
-                  child: _LabelCell(
-                    label: rows[rowIndex].label,
-                    icon: rows[rowIndex].labelIcon,
-                    isEven: rowIndex.isEven,
-                    isHighlightRow: rows[rowIndex].isHighlightRow,
-                  ),
+          TableRow(
+            children: [
+              _LabelCell(
+                label: rows[rowIndex].label,
+                icon: rows[rowIndex].labelIcon,
+                isEven: rowIndex.isEven,
+                isHighlightRow: rows[rowIndex].isHighlightRow,
+              ),
+              for (int c = 0; c < options.length; c++)
+                _ValueCell(
+                  value: c < rows[rowIndex].values.length
+                      ? rows[rowIndex].values[c]
+                      : '—',
+                  isHighlighted: c == highlightColumn,
+                  isEven: rowIndex.isEven,
+                  isHighlightRow: rows[rowIndex].isHighlightRow,
                 ),
-                for (int c = 0; c < options.length; c++)
-                  Expanded(
-                    child: _ValueCell(
-                      value: c < rows[rowIndex].values.length
-                          ? rows[rowIndex].values[c]
-                          : '—',
-                      isHighlighted: c == highlightColumn,
-                      isEven: rowIndex.isEven,
-                      isHighlightRow: rows[rowIndex].isHighlightRow,
-                      isLast: c == options.length - 1,
-                    ),
-                  ),
-              ],
-            ),
+            ],
           ),
       ],
     );
@@ -432,6 +428,7 @@ class _OptionHeader extends StatelessWidget {
     required this.label,
     required this.isHighlighted,
     this.badgeLabel,
+    // isLast kept for scrollable layout compatibility
     this.isLast = false,
   });
 
@@ -444,21 +441,7 @@ class _OptionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: isHighlighted ? AppColors.navy : AppColors.neutralN50,
-        border: Border(
-          left: BorderSide(
-            color: isHighlighted ? AppColors.navy : AppColors.neutralN100,
-            width: isHighlighted ? 2 : 0.5,
-          ),
-          right: isLast
-              ? BorderSide.none
-              : BorderSide(
-                  color: isHighlighted ? AppColors.navy : AppColors.neutralN100,
-                  width: isHighlighted ? 2 : 0.5,
-                ),
-        ),
-      ),
+      color: isHighlighted ? AppColors.navy : AppColors.neutralN50,
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -492,7 +475,7 @@ class _OptionHeader extends StatelessWidget {
               color: isHighlighted ? AppColors.white : AppColors.navy,
               height: 1.3,
             ),
-            maxLines: 2,
+            maxLines: 4,
             overflow: TextOverflow.ellipsis,
           ),
         ],
@@ -554,6 +537,7 @@ class _ValueCell extends StatelessWidget {
     required this.isHighlighted,
     required this.isEven,
     required this.isHighlightRow,
+    // isLast kept for scrollable layout compatibility
     this.isLast = false,
   });
 
@@ -598,21 +582,7 @@ class _ValueCell extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 14),
-      decoration: BoxDecoration(
-        color: bgColor,
-        border: Border(
-          left: BorderSide(
-            color: isHighlighted ? AppColors.navy : AppColors.neutralN100,
-            width: isHighlighted ? 2 : 0.5,
-          ),
-          right: isLast
-              ? BorderSide.none
-              : BorderSide(
-                  color: isHighlighted ? AppColors.navy : AppColors.neutralN100,
-                  width: isHighlighted ? 2 : 0.5,
-                ),
-        ),
-      ),
+      color: bgColor,
       alignment: Alignment.center,
       child: child,
     );

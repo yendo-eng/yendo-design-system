@@ -79,8 +79,8 @@ class AppButton extends StatelessWidget {
                     ? AppColors.neutralN200
                     : isPressed
                         ? AppColors.neutralN200
-                        : AppColors.neutralN200,
-                width: 1,
+                        : AppColors.navy,
+                width: 1.5,
               )
             : null,
       ),
@@ -96,6 +96,9 @@ class AppButton extends StatelessWidget {
             label,
             style: AppTextStyles.buttonDefault.copyWith(
               color: _textColor(),
+              fontWeight: variant == AppButtonVariant.tertiary
+                  ? FontWeight.w500
+                  : FontWeight.w700,
             ),
           ),
         ],
@@ -111,9 +114,10 @@ class AppButton extends StatelessWidget {
         if (isPressed) return AppColors.primaryO500;
         return AppColors.primaryO400;
       case AppButtonVariant.alternate:
+        if (isPressed) return AppColors.navy.withValues(alpha: 0.85);
         return AppColors.navy;
       case AppButtonVariant.tertiary:
-        if (isPressed) return AppColors.neutralN100;
+        if (isPressed) return AppColors.primaryO400.withValues(alpha: 0.06);
         return Colors.transparent;
       case AppButtonVariant.link:
         return Colors.transparent;
@@ -153,7 +157,10 @@ class AppButton extends StatelessWidget {
           ],
           Text(
             label,
-            style: textStyle.copyWith(color: color),
+            style: textStyle.copyWith(
+              color: color,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ],
       ),

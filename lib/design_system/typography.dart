@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'colors.dart';
 
 /// Yendo Design System — Typography
 ///
 /// Primary font: PP Neue Montreal
-/// Make sure the font is added to pubspec.yaml and the assets/fonts folder.
+/// Secondary font: Space Grotesk (via google_fonts) — use for display headlines,
+/// card amounts, or numeric callouts to add expressive personality.
+///
+/// Usage:
+///   AppTextStyles.spaceGrotesk(fontSize: 32, fontWeight: FontWeight.w700)
 class AppTextStyles {
   AppTextStyles._();
 
@@ -62,6 +67,27 @@ class AppTextStyles {
     height: 1.43,
     color: AppColors.navy,
   );
+
+  // ── Space Grotesk (secondary display font) ─────────────
+  /// Returns a Space Grotesk TextStyle. Use for display numbers, hero
+  /// headlines, or anywhere you want a more expressive, editorial feel.
+  ///
+  /// Example:
+  ///   Text('\$10,000', style: AppTextStyles.spaceGrotesk(fontSize: 40))
+  static TextStyle spaceGrotesk({
+    double fontSize = 16,
+    FontWeight fontWeight = FontWeight.w700,
+    Color color = AppColors.navy,
+    double? height,
+    double? letterSpacing,
+  }) =>
+      GoogleFonts.spaceGrotesk(
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+        color: color,
+        height: height,
+        letterSpacing: letterSpacing,
+      );
 
   // ── Headings ───────────────────────────────────────────
   static const TextStyle heading1 = TextStyle(

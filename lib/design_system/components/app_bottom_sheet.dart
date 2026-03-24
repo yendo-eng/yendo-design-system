@@ -54,6 +54,7 @@ Future<void> showAppBottomSheet({
   String? buttonLabel,
   VoidCallback? onButtonPressed,
   Widget? illustration,
+  Widget? child,
   List<AppBottomSheetItem>? listItems,
   bool showCloseButton = true,
 }) {
@@ -68,6 +69,7 @@ Future<void> showAppBottomSheet({
       buttonLabel: buttonLabel,
       onButtonPressed: onButtonPressed,
       illustration: illustration,
+      child: child,
       listItems: listItems,
       showCloseButton: showCloseButton,
     ),
@@ -84,6 +86,7 @@ class AppBottomSheet extends StatelessWidget {
     this.buttonLabel,
     this.onButtonPressed,
     this.illustration,
+    this.child,
     this.listItems,
     this.showCloseButton = true,
   });
@@ -93,6 +96,8 @@ class AppBottomSheet extends StatelessWidget {
   final String? buttonLabel;
   final VoidCallback? onButtonPressed;
   final Widget? illustration;
+  /// Optional custom content rendered below description
+  final Widget? child;
   final List<AppBottomSheetItem>? listItems;
   final bool showCloseButton;
 
@@ -184,6 +189,9 @@ class AppBottomSheet extends StatelessWidget {
                 ),
               ),
             ),
+
+          // ── Custom child content ──────────────────────────
+          if (child != null) child!,
 
           // ── List items ────────────────────────────────────
           if (listItems != null && listItems!.isNotEmpty)
