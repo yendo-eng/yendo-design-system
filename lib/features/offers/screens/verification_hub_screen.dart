@@ -86,7 +86,7 @@ class VerificationHubScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  '~10 min',
+                  '7 minutes',
                   style: AppTextStyles.bodySmall.copyWith(
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
