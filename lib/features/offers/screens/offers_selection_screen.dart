@@ -122,7 +122,7 @@ class _OffersSelectionScreenState extends State<OffersSelectionScreen> {
       backgroundColor: Colors.transparent,
       barrierColor: Colors.black.withValues(alpha: 0.4),
       builder: (_) => DraggableScrollableSheet(
-        initialChildSize: 0.55,
+        initialChildSize: 0.72,
         minChildSize: 0.4,
         maxChildSize: 0.95,
         expand: false,
