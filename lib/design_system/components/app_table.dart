@@ -307,7 +307,7 @@ class AppComparisonTable extends StatelessWidget {
 
   Widget _buildFixed(double labelWidth) {
     return Table(
-      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      defaultVerticalAlignment: TableCellVerticalAlignment.top,
       columnWidths: {
         0: FixedColumnWidth(labelWidth),
         for (int i = 1; i <= options.length; i++)
@@ -470,7 +470,7 @@ class _OptionHeader extends StatelessWidget {
             label,
             textAlign: TextAlign.center,
             style: AppTextStyles.bodySmall.copyWith(
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w500,
               fontSize: 12,
               color: isHighlighted ? AppColors.white : AppColors.navy,
               height: 1.3,
@@ -500,13 +500,9 @@ class _LabelCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-      color: isHighlightRow
-          ? AppColors.primaryO400.withOpacity(0.06)
-          : isEven
-              ? AppColors.white
-              : AppColors.neutralN50,
-      alignment: Alignment.centerLeft,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+      color: isEven ? AppColors.primaryO50 : AppColors.neutralN50,
+      alignment: Alignment.topLeft,
       child: Row(
         children: [
           if (icon != null) ...[
@@ -550,16 +546,10 @@ class _ValueCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bgColor = isHighlighted
-        ? (isHighlightRow
-            ? AppColors.navy.withOpacity(0.12)
-            : isEven
-                ? AppColors.navy.withOpacity(0.04)
-                : AppColors.navy.withOpacity(0.08))
-        : (isHighlightRow
-            ? AppColors.primaryO400.withOpacity(0.06)
-            : isEven
-                ? AppColors.white
-                : AppColors.neutralN50);
+        ? (isEven
+            ? AppColors.navy.withOpacity(0.06)
+            : AppColors.navy.withOpacity(0.10))
+        : (isEven ? AppColors.primaryO50 : AppColors.neutralN50);
 
     Widget child;
     final lower = value.toLowerCase().trim();
@@ -573,17 +563,17 @@ class _ValueCell extends StatelessWidget {
         textAlign: TextAlign.center,
         style: AppTextStyles.bodySmall.copyWith(
           fontSize: 12,
-          fontWeight: isHighlightRow ? FontWeight.w600 : FontWeight.w500,
+          fontWeight: FontWeight.w500,
           color: AppColors.navy,
-          height: 1.3,
+          height: 1.4,
         ),
       );
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       color: bgColor,
-      alignment: Alignment.center,
+      alignment: Alignment.topCenter,
       child: child,
     );
   }

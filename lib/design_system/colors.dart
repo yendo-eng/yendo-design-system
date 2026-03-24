@@ -10,6 +10,7 @@ class AppColors {
   static const Color black = Color(0xFF000000);
 
   // ── Primary (Orange) ───────────────────────────────────
+  static const Color primaryO50  = Color(0xFFFFF3E0); // Cream tint
   static const Color primaryO300 = Color(0xFFFB8456); // Hover
   static const Color primaryO400 = Color(0xFFFA652C); // Default
   static const Color primaryO500 = Color(0xFFDB4910); // Pressed

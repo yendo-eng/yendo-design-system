@@ -46,7 +46,6 @@ class CompareOffersScreen extends StatelessWidget {
       ComparisonRow(
         label: 'APR',
         values: products.map((o) => o.apr).toList(),
-        isHighlightRow: true,
       ),
       ComparisonRow(
         label: 'Credit Limit',
