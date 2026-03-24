@@ -28,7 +28,7 @@ class VerificationHubScreen extends StatelessWidget {
         topPadding: 28,
       ),
       content: [
-        const SizedBox(height: AppSpacing.lg),
+        const SizedBox(height: 4),
 
         // ── Welcome header ─────────────────────────────────
         Padding(
@@ -36,21 +36,9 @@ class VerificationHubScreen extends StatelessWidget {
           child: Text(
             'Welcome, John!',
             style: AppTextStyles.heading3.copyWith(
-              fontSize: 26,
+              fontSize: 22,
               fontWeight: FontWeight.w700,
               height: 1.2,
-            ),
-          ),
-        ),
-
-        const SizedBox(height: 4),
-
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screenPaddingH),
-          child: Text(
-            'Your offer',
-            style: AppTextStyles.bodySmall.copyWith(
-              color: AppColors.neutralN500,
             ),
           ),
         ),
@@ -166,24 +154,38 @@ class _VerificationNavBar extends StatelessWidget
       height: 50,
       color: AppColors.neutralN50,
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Row(
+      child: Stack(
+        alignment: Alignment.center,
         children: [
-          if (onBack != null) ...[
-            AppBackButton(onPressed: onBack),
-            const SizedBox(width: AppSpacing.sm),
-          ],
+          // Logo — always truly centered
           SvgPicture.asset(
             'assets/svgs/logos/logo_orange.svg',
             height: 18,
           ),
-          const Spacer(),
-          GestureDetector(
-            onTap: () {},
-            child: Text(
-              'Need Help?',
-              style: AppTextStyles.bodySmall.copyWith(
-                color: AppColors.neutralN500,
-                fontWeight: FontWeight.w500,
+          // Left — bare chevron (no circle)
+          if (onBack != null)
+            Align(
+              alignment: Alignment.centerLeft,
+              child: GestureDetector(
+                onTap: onBack,
+                child: const Icon(
+                  Icons.chevron_left_rounded,
+                  size: 28,
+                  color: AppColors.navy,
+                ),
+              ),
+            ),
+          // Right — Need Help?
+          Align(
+            alignment: Alignment.centerRight,
+            child: GestureDetector(
+              onTap: () {},
+              child: Text(
+                'Need Help?',
+                style: AppTextStyles.bodySmall.copyWith(
+                  color: AppColors.neutralN500,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
           ),
