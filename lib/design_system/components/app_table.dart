@@ -335,9 +335,9 @@ class _EmptyHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        color: AppColors.neutralN100,
+        color: AppColors.neutralN50,
         border: Border(
-          bottom: BorderSide(color: AppColors.neutralN200, width: 0.5),
+          bottom: BorderSide(color: AppColors.neutralN100, width: 0.5),
           right: BorderSide(color: AppColors.neutralN200, width: 1.5),
         ),
       ),
