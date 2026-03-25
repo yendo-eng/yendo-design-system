@@ -92,7 +92,7 @@ class TilaDisclosureTable extends StatelessWidget {
         label,
         style: AppTextStyles.bodySmall.copyWith(
           fontSize: 12,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w500,
           color: AppColors.white,
         ),
       ),
@@ -124,7 +124,7 @@ class TilaDisclosureTable extends StatelessWidget {
                 label,
                 style: AppTextStyles.bodySmall.copyWith(
                   fontSize: 12,
-                  fontWeight: labelBold ? FontWeight.w700 : FontWeight.w400,
+                  fontWeight: labelBold ? FontWeight.w500 : FontWeight.w400,
                   color: AppColors.navy,
                   height: 1.5,
                 ),
@@ -144,7 +144,7 @@ class TilaDisclosureTable extends StatelessWidget {
                 value,
                 style: AppTextStyles.bodySmall.copyWith(
                   fontSize: 12,
-                  fontWeight: valueBold ? FontWeight.w700 : FontWeight.w400,
+                  fontWeight: valueBold ? FontWeight.w500 : FontWeight.w400,
                   color: AppColors.navy,
                   height: 1.5,
                 ),
@@ -167,7 +167,7 @@ class TilaDisclosureTable extends StatelessWidget {
         children: [
           TextSpan(
             text: boldPart,
-            style: const TextStyle(fontWeight: FontWeight.w700),
+            style: const TextStyle(fontWeight: FontWeight.w500),
           ),
           TextSpan(text: rest),
         ],

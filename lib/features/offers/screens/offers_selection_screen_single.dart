@@ -92,7 +92,7 @@ class _OffersSelectionScreenSingleState
           ),
         ),
 
-        const SizedBox(height: AppSpacing.x3l),
+        const SizedBox(height: AppSpacing.lg),
 
         // ── Terms subheader ───────────────────────────────────────
         Padding(
