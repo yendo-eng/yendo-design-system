@@ -10,6 +10,7 @@ import 'offers_selection_screen_v2.dart';
 import 'verification_hub_screen.dart';
 import 'offers_selection_screen_bundle.dart';
 import 'offers_selection_screen_v4.dart';
+import 'offers_selection_screen_single.dart';
 
 /// Application Funnel — navigation hub for all design explorations
 /// and funnel simulation outcomes.
@@ -126,13 +127,13 @@ class FpoApplicationScreen extends StatelessWidget {
         const SizedBox(height: AppSpacing.sm),
 
         _OutcomeButton(
-          label: '🎨  Option D — Multiple offers',
-          sublabel: 'Rejection style · big number cards · 3 offers',
+          label: '🎨  Option D — One Offer Only',
+          sublabel: 'Single offer · inline TILA terms · no compare',
           color: AppColors.blue400,
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => OffersSelectionScreenV3(offers: allOffers),
+              builder: (_) => const OffersSelectionScreenSingle(),
             ),
           ),
         ),
