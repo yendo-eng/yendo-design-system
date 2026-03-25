@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../design_system/design_system.dart';
+import '../../../design_system/components/yendo_confetti.dart';
 import '../models/card_offer.dart';
 import 'fpo_application_screen.dart';
 import '../widgets/offer_card_widget.dart';
@@ -26,7 +27,8 @@ class _OffersSelectionScreenSingleState
 
   @override
   Widget build(BuildContext context) {
-    return KBaseScreenMultiLayout(
+    return YendoConfetti.wrap(
+      child: KBaseScreenMultiLayout(
       showStatusBar: true,
       contentBackgroundColor: AppColors.neutralN50,
       contentPadding: 0,
@@ -43,19 +45,29 @@ class _OffersSelectionScreenSingleState
         backgroundColor: AppColors.white,
       ),
       content: [
-        const SizedBox(height: AppSpacing.lg),
+        const SizedBox(height: AppSpacing.md),
 
-        // ── Page header ───────────────────────────────────────────
-        Padding(
-          padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.screenPaddingH),
+        // ── Congratulations + header ──────────────────────────────
+        Center(
           child: Text(
-            'You qualify for the Express Preferred Rewards Mastercard.',
-            style: AppTextStyles.heading3.copyWith(
-              fontSize: 26,
-              fontWeight: FontWeight.w700,
-              height: 1.25,
+            'Congratulations!',
+            style: AppTextStyles.bodyRegular.copyWith(
+              fontWeight: FontWeight.w500,
+              color: AppColors.neutralN500,
             ),
+          ),
+        ),
+
+        const SizedBox(height: AppSpacing.xxs),
+
+        Center(
+          child: Text(
+            'Your offer',
+            style: AppTextStyles.heading3.copyWith(
+              fontSize: 28,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.center,
           ),
         ),
 
@@ -72,7 +84,7 @@ class _OffersSelectionScreenSingleState
             showCreditLimit: true,
             showBulletPoints: true,
             showRecommended: false,
-            showApr: false,
+            showApr: true,
             showViewTerms: false,
             showRewardsBullet: true,
             extraBottomPadding: 12.0,
@@ -88,9 +100,10 @@ class _OffersSelectionScreenSingleState
               horizontal: AppSpacing.screenPaddingH),
           child: Text(
             'Terms',
-            style: AppTextStyles.heading3.copyWith(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
+            style: AppTextStyles.bodyRegular.copyWith(
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+              color: AppColors.navy,
             ),
           ),
         ),
@@ -106,7 +119,7 @@ class _OffersSelectionScreenSingleState
 
         const SizedBox(height: AppSpacing.x3l),
       ],
-    );
+    ));
   }
 
   void _onContinue(BuildContext context) {
