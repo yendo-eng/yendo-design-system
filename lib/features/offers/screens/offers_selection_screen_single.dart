@@ -101,7 +101,7 @@ class _OffersSelectionScreenSingleState
           child: Text(
             'Terms',
             style: AppTextStyles.bodyRegular.copyWith(
-              fontSize: 15,
+              fontSize: 13,
               fontWeight: FontWeight.w500,
               color: AppColors.navy,
             ),
