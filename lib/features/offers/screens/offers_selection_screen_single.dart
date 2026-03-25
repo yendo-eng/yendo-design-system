@@ -13,7 +13,7 @@ import '../widgets/tila_table_widget.dart';
 class OffersSelectionScreenSingle extends StatefulWidget {
   const OffersSelectionScreenSingle({super.key});
 
-  static const offer = CardOffer.vehicle;
+  static const offer = YendoOffers.vehicle;
 
   @override
   State<OffersSelectionScreenSingle> createState() =>
