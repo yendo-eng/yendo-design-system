@@ -30,10 +30,10 @@ class _OffersSelectionScreenSingleState
     return YendoConfetti.wrap(
       child: KBaseScreenMultiLayout(
       showStatusBar: true,
-      contentBackgroundColor: AppColors.neutralN50,
+      contentBackgroundColor: Colors.transparent,
       contentPadding: 0,
       appBar: AppNavBar.logo(
-        backgroundColor: AppColors.neutralN50,
+        backgroundColor: Colors.transparent,
         height: 46,
         onBack: () => Navigator.of(context).pop(),
       ),
@@ -82,7 +82,7 @@ class _OffersSelectionScreenSingleState
             isSelected: _selected,
             onTap: () => setState(() => _selected = !_selected),
             showCreditLimit: true,
-            showBulletPoints: true,
+            showBulletPoints: false,
             showRecommended: false,
             showApr: true,
             showViewTerms: false,
