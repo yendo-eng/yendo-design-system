@@ -13,6 +13,8 @@ import '../widgets/tila_table_widget.dart';
 class OffersSelectionScreenSingle extends StatefulWidget {
   const OffersSelectionScreenSingle({super.key});
 
+  static const offer = CardOffer.vehicle;
+
   @override
   State<OffersSelectionScreenSingle> createState() =>
       _OffersSelectionScreenSingleState();
@@ -20,7 +22,6 @@ class OffersSelectionScreenSingle extends StatefulWidget {
 
 class _OffersSelectionScreenSingleState
     extends State<OffersSelectionScreenSingle> {
-  static const _offer = CardOffer.vehicle;
   bool _selected = false;
 
   @override
@@ -65,7 +66,7 @@ class _OffersSelectionScreenSingleState
           padding: const EdgeInsets.symmetric(
               horizontal: AppSpacing.screenPaddingH),
           child: OfferCardWidget(
-            offer: _offer,
+            offer: OffersSelectionScreenSingle.offer,
             isSelected: _selected,
             onTap: () => setState(() => _selected = !_selected),
             showCreditLimit: true,
@@ -192,8 +193,8 @@ class _OffersSelectionScreenSingleState
                   context,
                   MaterialPageRoute(
                     builder: (_) => FpoApplicationScreen(
-                      selectedOffer: _offer,
-                      allOffers: const [_offer],
+                      selectedOffer: OffersSelectionScreenSingle.offer,
+                      allOffers: const [OffersSelectionScreenSingle.offer],
                     ),
                   ),
                 );
