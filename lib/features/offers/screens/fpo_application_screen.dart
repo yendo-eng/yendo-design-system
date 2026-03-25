@@ -84,20 +84,6 @@ class FpoApplicationScreen extends StatelessWidget {
         const SizedBox(height: AppSpacing.sm),
 
         _OutcomeButton(
-          label: '🏠  Homeowner denial — no other offer',
-          sublabel: 'Not listed as owner on property',
-          color: AppColors.neutralN500,
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => const HomeownerDenialScreen(),
-            ),
-          ),
-        ),
-
-        const SizedBox(height: AppSpacing.sm),
-
-        _OutcomeButton(
           label: '🎨  Option A — Credit Emphasis - no APR',
           sublabel: 'Credit limit hero · no APR · centered view terms',
           color: AppColors.blue400,
@@ -171,7 +157,21 @@ class FpoApplicationScreen extends StatelessWidget {
         const Divider(color: AppColors.neutralN100, height: 1),
         const SizedBox(height: AppSpacing.md),
 
-        _SectionHeader(label: 'Simulate an outcome'),
+        _SectionHeader(label: 'Rejections and denials'),
+
+        const SizedBox(height: AppSpacing.sm),
+
+        _OutcomeButton(
+          label: '🏠  Homeowner denial — no other offer',
+          sublabel: 'Not listed as owner on property',
+          color: AppColors.neutralN500,
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const HomeownerDenialScreen(),
+            ),
+          ),
+        ),
 
         const SizedBox(height: AppSpacing.sm),
 
@@ -227,14 +227,6 @@ class FpoApplicationScreen extends StatelessWidget {
           disabledLabel: 'No offers left to downsell',
         ),
 
-        const SizedBox(height: AppSpacing.sm),
-
-        _OutcomeButton(
-          label: '✅  Applicant accepts Final Offer',
-          sublabel: 'Success! Flow complete',
-          color: AppColors.green400,
-          onTap: () => _showSuccess(context),
-        ),
 
         const SizedBox(height: AppSpacing.xl),
 
