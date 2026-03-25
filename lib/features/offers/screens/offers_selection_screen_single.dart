@@ -207,7 +207,7 @@ class _OffersSelectionScreenSingleState
                   MaterialPageRoute(
                     builder: (_) => FpoApplicationScreen(
                       selectedOffer: OffersSelectionScreenSingle.offer,
-                      allOffers: const [OffersSelectionScreenSingle.offer],
+                      allOffers: YendoOffers.all,
                     ),
                   ),
                 );
