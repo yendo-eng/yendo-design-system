@@ -23,8 +23,6 @@ class OffersSelectionScreenSingle extends StatefulWidget {
 
 class _OffersSelectionScreenSingleState
     extends State<OffersSelectionScreenSingle> {
-  bool _selected = false;
-
   @override
   Widget build(BuildContext context) {
     return YendoConfetti.wrap(
@@ -41,7 +39,7 @@ class _OffersSelectionScreenSingleState
       footer: AppStickyBottomBar(
         primaryLabel: 'Continue to application',
         primaryVariant: AppButtonVariant.alternate,
-        onPrimary: _selected ? () => _onContinue(context) : null,
+        onPrimary: () => _onContinue(context),
         backgroundColor: AppColors.white,
       ),
       content: [
@@ -62,7 +60,7 @@ class _OffersSelectionScreenSingleState
 
         Center(
           child: Text(
-            'Your offer',
+            'You\'re pre-approved',
             style: AppTextStyles.heading3.copyWith(
               fontSize: 28,
               fontWeight: FontWeight.w700,
@@ -79,8 +77,8 @@ class _OffersSelectionScreenSingleState
               horizontal: AppSpacing.screenPaddingH),
           child: OfferCardWidget(
             offer: OffersSelectionScreenSingle.offer,
-            isSelected: _selected,
-            onTap: () => setState(() => _selected = !_selected),
+            isSelected: true,
+            onTap: null,
             showCreditLimit: true,
             showBulletPoints: false,
             showRecommended: false,
