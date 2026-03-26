@@ -11,6 +11,7 @@ import 'verification_hub_screen.dart';
 import 'offers_selection_screen_bundle.dart';
 import 'offers_selection_screen_v4.dart';
 import 'offers_selection_screen_single.dart';
+import 'ux_improvements_flow.dart';
 
 /// Application Funnel — navigation hub for all design explorations
 /// and funnel simulation outcomes.
@@ -228,6 +229,28 @@ class FpoApplicationScreen extends StatelessWidget {
           disabledLabel: 'No offers left to downsell',
         ),
 
+
+        const SizedBox(height: AppSpacing.xl),
+
+        // ── Section: UX Improvements ───────────────────────
+        const Divider(color: AppColors.neutralN100, height: 1),
+        const SizedBox(height: AppSpacing.md),
+
+        _SectionHeader(label: 'UX Improvements'),
+
+        const SizedBox(height: AppSpacing.sm),
+
+        _OutcomeButton(
+          label: '🔄  Remove return to Vehicle Hub (progress indicator)',
+          sublabel: 'Airbnb-style bottom step bar · no close-to-hub button',
+          color: AppColors.blue400,
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const UxImprovementsFlow(),
+            ),
+          ),
+        ),
 
         const SizedBox(height: AppSpacing.xl),
 
