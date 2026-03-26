@@ -78,7 +78,7 @@ class _OffersSelectionScreenSingleState
           child: OfferCardWidget(
             offer: OffersSelectionScreenSingle.offer,
             isSelected: true,
-            onTap: null,
+            onTap: () {},
             showCreditLimit: true,
             showBulletPoints: false,
             showRecommended: false,
