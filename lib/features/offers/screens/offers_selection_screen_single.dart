@@ -77,7 +77,7 @@ class _OffersSelectionScreenSingleState
               horizontal: AppSpacing.screenPaddingH),
           child: OfferCardWidget(
             offer: OffersSelectionScreenSingle.offer,
-            isSelected: true,
+            isSelected: false,
             onTap: () {},
             showCreditLimit: true,
             showBulletPoints: false,
