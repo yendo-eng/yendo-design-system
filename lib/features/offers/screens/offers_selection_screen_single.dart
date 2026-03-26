@@ -38,7 +38,7 @@ class _OffersSelectionScreenSingleState
       hasStickyFooter: true,
       footer: AppStickyBottomBar(
         primaryLabel: 'Continue to application',
-        primaryVariant: AppButtonVariant.alternate,
+        primaryVariant: AppButtonVariant.primary,
         onPrimary: () => _onContinue(context),
         backgroundColor: AppColors.white,
       ),
