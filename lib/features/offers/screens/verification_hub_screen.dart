@@ -47,7 +47,7 @@ class VerificationHubScreen extends StatelessWidget {
           : null,
       hasStickyFooter: true,
       footer: AppStickyBottomBar(
-        primaryLabel: 'Continue to vehicle details',
+        primaryLabel: 'Continue',
         primaryVariant: AppButtonVariant.alternate,
         onPrimary: onContinue ?? () => Navigator.of(context).pop(),
         backgroundColor: AppColors.white,
@@ -90,7 +90,7 @@ class VerificationHubScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Get your card in 3 steps',
+                        'Your card is almost ready',
                         style: AppTextStyles.bodySmall.copyWith(
                           color: AppColors.navy,
                           fontWeight: FontWeight.w600,
@@ -137,21 +137,21 @@ class VerificationHubScreen extends StatelessWidget {
                 const Column(
                   children: [
                 _StepItem(
-                  label: 'Vehicle details',
+                  label: 'Verify your vehicle',
                   subtitle: 'You may be asked for license plate, VIN, and/or photos.',
                   state: _StepState.active,
                   showChevron: false,
                 ),
                 _StepItem(
-                  label: 'Personal information',
-                  subtitle: 'Verify your identity.',
+                  label: 'Confirm your identity',
+                  subtitle: 'Have your ID handy.',
                   hasIncomingLine: true,
                   state: _StepState.pending,
                   showChevron: false,
                 ),
                 _StepItem(
                   label: 'Activate your card',
-                  subtitle: 'Agree to terms and conditions, promise of title.',
+                  subtitle: 'Review your agreement and activate your card.',
                   hasIncomingLine: true,
                   state: _StepState.pending,
                   isLast: true,
