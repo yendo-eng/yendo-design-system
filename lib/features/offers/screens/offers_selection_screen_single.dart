@@ -37,30 +37,18 @@ class _OffersSelectionScreenSingleState
       ),
       hasStickyFooter: true,
       footer: AppStickyBottomBar(
-        primaryLabel: 'Continue to application',
+        primaryLabel: 'Claim your offer',
         primaryVariant: AppButtonVariant.primary,
         onPrimary: () => _onContinue(context),
         backgroundColor: AppColors.white,
       ),
       content: [
-        const SizedBox(height: AppSpacing.md),
+        const SizedBox(height: 4),
 
-        // ── Congratulations + header ──────────────────────────────
+        // ── Header ───────────────────────────────────────────
         Center(
           child: Text(
-            'Congratulations!',
-            style: AppTextStyles.bodyRegular.copyWith(
-              fontWeight: FontWeight.w500,
-              color: AppColors.neutralN500,
-            ),
-          ),
-        ),
-
-        const SizedBox(height: AppSpacing.xxs),
-
-        Center(
-          child: Text(
-            'You\'re pre-approved',
+            "You're pre-approved!",
             style: AppTextStyles.heading3.copyWith(
               fontSize: 28,
               fontWeight: FontWeight.w700,

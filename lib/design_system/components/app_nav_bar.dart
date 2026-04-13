@@ -130,7 +130,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
 
 // ── Back Button ────────────────────────────────────────────
 
-/// Standalone back button — circle with chevron left.
+/// Standalone back button — chevron icon, no background circle.
 /// Can be used inside AppNavBar or anywhere on its own.
 class AppBackButton extends StatelessWidget {
   const AppBackButton({
@@ -144,16 +144,12 @@ class AppBackButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onPressed ?? () => Navigator.of(context).maybePop(),
-      child: Container(
+      child: const SizedBox(
         width: 36,
         height: 36,
-        decoration: const BoxDecoration(
-          color: AppColors.neutralN75,
-          shape: BoxShape.circle,
-        ),
-        child: const Icon(
+        child: Icon(
           Icons.chevron_left_rounded,
-          size: 22,
+          size: 26,
           color: AppColors.navy,
         ),
       ),

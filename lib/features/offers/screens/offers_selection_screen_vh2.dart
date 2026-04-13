@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../../design_system/design_system.dart';
 import '../models/card_offer.dart';
+import 'compare_offers_screen.dart';
 import '../widgets/offer_card_widget.dart';
 import '../widgets/tila_table_widget.dart';
-import 'fpo_application_screen.dart';
-import 'compare_offers_screen.dart';
+import 'verification_hub_screen.dart';
 
-/// Auto Refi as Bundle — design exploration.
-///
-/// Duplicate of Option A with one change: the first card (Express Preferred
-/// Rewards) shows a paragraph subtitle explaining the bundled value prop.
-
-class OffersSelectionScreenBundle extends StatefulWidget {
-  const OffersSelectionScreenBundle({
+/// VH Option 2 — same as Control: APR/Fees but the Verification Hub
+/// bottom sheet header shows a card image alongside "Welcome, John!"
+/// and a pre-approval summary paragraph below.
+class OffersSelectionScreenVH2 extends StatefulWidget {
+  const OffersSelectionScreenVH2({
     super.key,
     this.offers = YendoOffers.all,
   });
@@ -20,12 +19,11 @@ class OffersSelectionScreenBundle extends StatefulWidget {
   final List<CardOffer> offers;
 
   @override
-  State<OffersSelectionScreenBundle> createState() =>
-      _OffersSelectionScreenBundleState();
+  State<OffersSelectionScreenVH2> createState() =>
+      _OffersSelectionScreenVH2State();
 }
 
-class _OffersSelectionScreenBundleState
-    extends State<OffersSelectionScreenBundle> {
+class _OffersSelectionScreenVH2State extends State<OffersSelectionScreenVH2> {
   CardOffer? _selectedOffer;
 
   @override
@@ -42,7 +40,11 @@ class _OffersSelectionScreenBundleState
         showStatusBar: true,
         contentBackgroundColor: Colors.transparent,
         contentPadding: 0,
-        appBar: AppNavBar.logo(backgroundColor: Colors.transparent, height: 46),
+        appBar: AppNavBar.logo(
+          backgroundColor: Colors.transparent,
+          height: 46,
+          onBack: () => Navigator.of(context).pop(),
+        ),
         hasStickyFooter: true,
         footer: AppStickyBottomBar(
           primaryLabel: 'Claim your offer',
@@ -69,6 +71,7 @@ class _OffersSelectionScreenBundleState
 
           const SizedBox(height: AppSpacing.lg),
 
+          // ── Offer cards ──────────────────────────────────────────────────
           ...widget.offers.asMap().entries.map((e) => Padding(
                 padding: const EdgeInsets.fromLTRB(
                   AppSpacing.screenPaddingH,
@@ -88,17 +91,10 @@ class _OffersSelectionScreenBundleState
                   showViewTerms: false,
                   extraBottomPadding: 10.0,
                   imageScale: 0.85,
-                  // Bundle name + subtitle + callout on first card only
-                  nameOverride: e.key == 0
-                      ? 'Platinum Rewards + Auto Refinance'
-                      : null,
-                  subtitle: null,
-                  callout: e.key == 0 ? const _SavingsCallout() : null,
                 ),
               )),
 
-
-          // ── Always-active "View terms" link below all cards ──
+          // ── View terms ───────────────────────────────────────────────────
           Center(
             child: GestureDetector(
               onTap: () => _showTermsSheet(
@@ -119,6 +115,106 @@ class _OffersSelectionScreenBundleState
 
           const SizedBox(height: AppSpacing.xl),
         ],
+      ),
+    );
+  }
+
+  // ── Helpers ──────────────────────────────────────────────────────────────
+
+  void _onContinue(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      barrierColor: Colors.black.withValues(alpha: 0.5),
+      builder: (_) => SizedBox(
+        height: MediaQuery.of(context).size.height * 0.95,
+        child: ClipRRect(
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+          child: Container(
+            color: AppColors.neutralN50,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                // Drag handle
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Center(
+                    child: Container(
+                      width: 68,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: AppColors.neutralN500.withValues(alpha: 0.4),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ),
+                ),
+
+                // Header row: Welcome + card image
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSpacing.screenPaddingH, 12,
+                    AppSpacing.screenPaddingH, 6,
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Welcome, John!',
+                          style: AppTextStyles.heading3.copyWith(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: SvgPicture.asset(
+                          'assets/images/Vehicle.svg',
+                          height: 36,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Pre-approval summary paragraph
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSpacing.screenPaddingH, 0,
+                    AppSpacing.screenPaddingH, 16,
+                  ),
+                  child: Text(
+                    'You are pre-approved up to \$10,000 with the Platinum Rewards Mastercard.',
+                    style: AppTextStyles.bodyRegular.copyWith(
+                      color: AppColors.neutralN500,
+                      height: 1.5,
+                    ),
+                  ),
+                ),
+
+                Expanded(
+                  child: MediaQuery.removePadding(
+                    context: context,
+                    removeTop: true,
+                    child: VerificationHubScreen(
+                      showBackButton: false,
+                      showStatusBar: false,
+                      showNavBar: false,
+                      showHeroCard: false,
+                      onContinue: () {
+                        Navigator.of(context).pop(); // close sheet
+                        Navigator.of(context).pop(); // back to FPO
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -146,7 +242,7 @@ class _OffersSelectionScreenBundleState
             children: [
               const SizedBox(height: 12),
               Container(
-                width: 47,
+                width: 68,
                 height: 4,
                 decoration: BoxDecoration(
                   color: AppColors.neutralN200,
@@ -219,40 +315,37 @@ class _OffersSelectionScreenBundleState
             children: [
               const SizedBox(height: 12),
               Container(
-                width: 47,
+                width: 68,
                 height: 4,
                 decoration: BoxDecoration(
                   color: AppColors.neutralN200,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 24),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-                child: Row(
-                  children: [
-                    Text(
-                      'Compare credit cards',
-                      style: AppTextStyles.heading3.copyWith(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                      ),
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Compare credit cards',
+                    style: AppTextStyles.heading3.copyWith(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
                     ),
-                  ],
+                  ),
                 ),
               ),
-              const SizedBox(height: AppSpacing.md),
               Expanded(
                 child: SingleChildScrollView(
                   controller: scrollController,
-                  padding: const EdgeInsets.all(AppSpacing.md),
+                  padding: const EdgeInsets.fromLTRB(
+                      AppSpacing.md, 4, AppSpacing.md, AppSpacing.md),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: AppSpacing.xs),
                       CompareOffersScreen.buildComparisonTable(widget.offers),
-                      const SizedBox(height: AppSpacing.lg),
                       const SizedBox(height: AppSpacing.xl),
                     ],
                   ),
@@ -261,180 +354,6 @@ class _OffersSelectionScreenBundleState
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  void _onContinue(BuildContext context) {
-    if (_selectedOffer == null) return;
-
-    // First card (bundle offer) shows a confirmation sheet before continuing
-    final isBundleOffer = _selectedOffer?.id == widget.offers.first.id;
-    if (isBundleOffer) {
-      _showBundleConfirmSheet(context);
-    } else {
-      _navigateToFpo(context, _selectedOffer!);
-    }
-  }
-
-  void _showBundleConfirmSheet(BuildContext context) {
-    final offer = _selectedOffer!;
-    final bottomPadding = MediaQuery.of(context).padding.bottom;
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      barrierColor: Colors.black.withValues(alpha: 0.5),
-      builder: (_) => Container(
-        decoration: const BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
-        ),
-        padding: EdgeInsets.fromLTRB(
-          AppSpacing.screenPaddingH,
-          AppSpacing.lg,
-          AppSpacing.screenPaddingH,
-          bottomPadding > 0
-              ? bottomPadding + AppSpacing.xs
-              : AppSpacing.xl,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Drag handle
-            Center(
-              child: Container(
-                width: 47,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: AppColors.neutralN200,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: AppSpacing.xl),
-
-            // Icon
-            Container(
-              width: 52,
-              height: 52,
-              decoration: BoxDecoration(
-                color: AppColors.primaryO400.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-              ),
-              child: const Icon(
-                Icons.directions_car_outlined,
-                size: 28,
-                color: AppColors.primaryO400,
-              ),
-            ),
-
-            const SizedBox(height: AppSpacing.lg),
-
-            Text(
-              'Refinance your existing auto loan to get your Platinum Rewards credit card.',
-              style: AppTextStyles.heading3.copyWith(
-                fontSize: 22,
-                fontWeight: FontWeight.w700,
-                height: 1.25,
-              ),
-            ),
-
-            const SizedBox(height: AppSpacing.md),
-
-            Text(
-              "We'll walk you through refinancing your auto loan and activating your new credit card in one seamless application.",
-              style: AppTextStyles.bodyRegular.copyWith(
-                color: AppColors.neutralN500,
-                height: 1.6,
-              ),
-            ),
-
-            const SizedBox(height: AppSpacing.xl),
-
-            AppButton(
-              label: 'Select offer and continue',
-              onPressed: () {
-                Navigator.of(context).pop();
-                _navigateToFpo(context, offer);
-              },
-              variant: AppButtonVariant.alternate,
-              isFullWidth: true,
-            ),
-
-            const SizedBox(height: AppSpacing.md),
-
-            Center(
-              child: AppButton(
-                label: 'Go back',
-                onPressed: () => Navigator.of(context).pop(),
-                variant: AppButtonVariant.link,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _navigateToFpo(BuildContext context, CardOffer offer) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => FpoApplicationScreen(
-          selectedOffer: offer,
-          allOffers: widget.offers,
-        ),
-      ),
-    );
-  }
-}
-
-// ── Savings callout banner ────────────────────────────────────────────────────
-
-class _SavingsCallout extends StatelessWidget {
-  const _SavingsCallout();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
-        color: AppColors.blue50,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Icon(Icons.savings_outlined, size: 20, color: AppColors.navy),
-          const SizedBox(width: 10),
-          Expanded(
-            child: RichText(
-              text: TextSpan(
-                style: AppTextStyles.bodySmall.copyWith(
-                  color: AppColors.navy,
-                  fontSize: 13,
-                  height: 1.4,
-                ),
-                children: const [
-                  TextSpan(
-                    text: 'An average customer reduces their monthly payment by ',
-                  ),
-                  TextSpan(
-                    text: '\$290',
-                    style: TextStyle(fontWeight: FontWeight.w700),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

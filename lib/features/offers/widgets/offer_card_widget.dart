@@ -26,13 +26,16 @@ class OfferCardWidget extends StatelessWidget {
     this.showBulletPoints = true,
     this.showRecommended = false,
     this.showApr = true,
+    this.showAnnualFee = false,
     this.showViewTerms = true,
     this.showAprBullet = true,
     this.showRewardsBullet = true,
     this.subtitle,
     this.nameOverride,
+    this.callout,
     this.extraBottomPadding = 0.0,
     this.imageScale = 1.0,
+    this.benefitLine,
   });
 
   final CardOffer offer;
@@ -51,6 +54,9 @@ class OfferCardWidget extends StatelessWidget {
   /// Show APR row inside the card (only applies when showCreditLimit is true)
   final bool showApr;
 
+  /// Show Annual Fee row inside the card (only applies when showCreditLimit is true)
+  final bool showAnnualFee;
+
   /// Show the "View terms" link inside the card
   final bool showViewTerms;
 
@@ -66,11 +72,17 @@ class OfferCardWidget extends StatelessWidget {
   /// Override the displayed card name (e.g. for bundle variants)
   final String? nameOverride;
 
+  /// Optional widget rendered below the main card row (e.g. a savings callout banner)
+  final Widget? callout;
+
   /// Extra padding added to the bottom of the card content (makes card taller)
   final double extraBottomPadding;
 
   /// Scale applied to the card image size (1.0 = default 80×56, 0.85 = 68×48)
   final double imageScale;
+
+  /// When provided, replaces the APR/Annual Fee line with custom benefit copy.
+  final String? benefitLine;
 
   @override
   Widget build(BuildContext context) {
@@ -114,155 +126,296 @@ class OfferCardWidget extends StatelessWidget {
           AppSpacing.md,
           AppSpacing.md + extraBottomPadding,
         ),
-        child: Row(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ── Text content ─────────────────────────────
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // "Recommended" badge
-                  if (showRecommended) ...[
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 3),
-                      decoration: BoxDecoration(
-                        color: AppColors.primaryO400,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: const Text(
-                        'Recommended',
-                        style: TextStyle(
-                          fontFamily: 'PPNeueMontreal',
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.white,
-                          height: 1.2,
+            // ── Main row: text left, card image right ────
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // "Recommended" badge
+                      if (showRecommended) ...[
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: AppColors.primaryO400,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: const Text(
+                            'Recommended',
+                            style: TextStyle(
+                              fontFamily: 'PPNeueMontreal',
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.white,
+                              height: 1.2,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.xs),
+                      ],
+
+                      // Card name
+                      Text(
+                        nameOverride ?? offer.name,
+                        style: AppTextStyles.bodyRegular.copyWith(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
                         ),
                       ),
-                    ),
-                    const SizedBox(height: AppSpacing.xs),
-                  ],
 
-                  // Name
-                  Text(
-                    nameOverride ?? offer.name,
-                    style: AppTextStyles.bodyRegular.copyWith(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16,
-                    ),
+                      // ── When NO callout: keep all content inside the
+                      //    Row column so the image aligns with it (original layout)
+                      if (callout == null) ...[
+                        if (subtitle != null) ...[
+                          const SizedBox(height: AppSpacing.xxs),
+                          Text(
+                            subtitle!,
+                            style: AppTextStyles.bodySmall.copyWith(
+                              color: AppColors.neutralN500,
+                              fontSize: 13,
+                              height: 1.5,
+                            ),
+                          ),
+                        ],
+
+                        const SizedBox(height: AppSpacing.xs),
+
+                        if (showBulletPoints) ...[
+                          ...[
+                            offer.bulletPoints.first,
+                            'Cash advance limit ${offer.cashAdvanceLimit}',
+                            if (showAprBullet) 'APR ${offer.apr}',
+                            if (showRewardsBullet) offer.rewardsLine,
+                          ].map((point) => Padding(
+                                padding: const EdgeInsets.only(bottom: 2),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('• ',
+                                        style: AppTextStyles.bodySmall.copyWith(
+                                          color: AppColors.neutralN500,
+                                        )),
+                                    Expanded(
+                                      child: Text(
+                                        point,
+                                        style: AppTextStyles.bodySmall.copyWith(
+                                          color: AppColors.neutralN500,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )),
+                        ],
+
+                        if (showCreditLimit) ...[
+                          Text(
+                            'Credit Limit',
+                            style: AppTextStyles.bodySmall.copyWith(
+                              color: AppColors.neutralN500,
+                              fontSize: 12,
+                              height: 1.1,
+                            ),
+                          ),
+                          Text(
+                            offer.creditLimit,
+                            style: AppTextStyles.spaceGrotesk(
+                              fontSize: 28,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          if (showApr ||
+                              (showAnnualFee && offer.annualFee != null)) ...[
+                            const SizedBox(height: 4),
+                            RichText(
+                              text: TextSpan(
+                                style: AppTextStyles.bodySmall.copyWith(
+                                  color: AppColors.neutralN500,
+                                  fontSize: 13,
+                                ),
+                                children: [
+                                  if (showApr)
+                                    TextSpan(text: 'APR ${offer.apr}'),
+                                  if (showApr &&
+                                      showAnnualFee &&
+                                      offer.annualFee != null)
+                                    TextSpan(
+                                      text: '  |  ',
+                                      style: AppTextStyles.bodySmall.copyWith(
+                                        color: AppColors.neutralN200,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                  if (showAnnualFee && offer.annualFee != null)
+                                    TextSpan(
+                                        text: 'Annual fee: ${offer.annualFee}'),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ],
+
+                        if (showViewTerms) ...[
+                          const SizedBox(height: AppSpacing.sm),
+                          GestureDetector(
+                            onTap: () => _showTerms(context),
+                            child: Text(
+                              'View terms',
+                              style: AppTextStyles.bodySmall.copyWith(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12,
+                                color: AppColors.contentDisabled,
+                                decoration: TextDecoration.underline,
+                                decorationColor: AppColors.contentDisabled,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ],
                   ),
+                ),
 
-                  if (subtitle != null) ...[
-                    const SizedBox(height: AppSpacing.xxs),
-                    Text(
-                      subtitle!,
+                const SizedBox(width: AppSpacing.md),
+
+                // Card image
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+                  child: SvgPicture.asset(
+                    offer.imagePath,
+                    width: 80 * imageScale,
+                    height: 56 * imageScale,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ],
+            ),
+
+            // ── Benefit line — full width below the card image row ──────────
+            if (benefitLine != null && callout == null) ...[
+              const SizedBox(height: 6),
+              Text(
+                benefitLine!,
+                style: AppTextStyles.bodySmall.copyWith(
+                  color: AppColors.neutralN500,
+                  fontSize: 13,
+                ),
+              ),
+            ],
+
+            // ── When callout IS present: full-width content below the row ──
+            if (callout != null) ...[
+              const SizedBox(height: AppSpacing.xs),
+              callout!,
+              const SizedBox(height: AppSpacing.xs + 2),
+
+              if (subtitle != null) ...[
+                Text(
+                  subtitle!,
+                  style: AppTextStyles.bodySmall.copyWith(
+                    color: AppColors.neutralN500,
+                    fontSize: 13,
+                    height: 1.5,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.xs),
+              ],
+
+              if (showBulletPoints) ...[
+                ...[
+                  offer.bulletPoints.first,
+                  'Cash advance limit ${offer.cashAdvanceLimit}',
+                  if (showAprBullet) 'APR ${offer.apr}',
+                  if (showRewardsBullet) offer.rewardsLine,
+                ].map((point) => Padding(
+                      padding: const EdgeInsets.only(bottom: 2),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('• ',
+                              style: AppTextStyles.bodySmall.copyWith(
+                                color: AppColors.neutralN500,
+                              )),
+                          Expanded(
+                            child: Text(
+                              point,
+                              style: AppTextStyles.bodySmall.copyWith(
+                                color: AppColors.neutralN500,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )),
+              ],
+
+              if (showCreditLimit) ...[
+                Text(
+                  'Credit Limit',
+                  style: AppTextStyles.bodySmall.copyWith(
+                    color: AppColors.neutralN500,
+                    fontSize: 12,
+                    height: 1.1,
+                  ),
+                ),
+                Text(
+                  offer.creditLimit,
+                  style: AppTextStyles.spaceGrotesk(
+                    fontSize: 28,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                if (showApr || (showAnnualFee && offer.annualFee != null)) ...[
+                  const SizedBox(height: 4),
+                  RichText(
+                    text: TextSpan(
                       style: AppTextStyles.bodySmall.copyWith(
                         color: AppColors.neutralN500,
                         fontSize: 13,
-                        height: 1.5,
                       ),
-                    ),
-                  ],
-
-                  const SizedBox(height: AppSpacing.xs),
-
-                  // Bullet points (initial screen)
-                  // Order: pre-approved amount, cash advance, APR, rewards
-                  if (showBulletPoints) ...[
-                    ...[
-                      offer.bulletPoints.first, // Pre-approved up to $X
-                      'Cash advance limit ${offer.cashAdvanceLimit}',
-                      if (showAprBullet) 'APR ${offer.apr}',
-                      if (showRewardsBullet) offer.rewardsLine, // 1.5% rewards on Autopay
-                    ].map((point) => Padding(
-                          padding: const EdgeInsets.only(bottom: 2),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('• ',
-                                  style: AppTextStyles.bodySmall.copyWith(
-                                    color: AppColors.neutralN500,
-                                  )),
-                              Expanded(
-                                child: Text(
-                                  point,
-                                  style: AppTextStyles.bodySmall.copyWith(
-                                    color: AppColors.neutralN500,
-                                  ),
-                                ),
-                              ),
-                            ],
+                      children: [
+                        if (showApr) TextSpan(text: 'APR ${offer.apr}'),
+                        if (showApr && showAnnualFee && offer.annualFee != null)
+                          TextSpan(
+                            text: '  |  ',
+                            style: AppTextStyles.bodySmall.copyWith(
+                              color: AppColors.neutralN200,
+                              fontSize: 13,
+                            ),
                           ),
-                        )),
-                  ],
-
-                  // Credit limit + APR (downsell screens)
-                  if (showCreditLimit) ...[
-                    Text(
-                      'Credit Limit',
-                      style: AppTextStyles.bodySmall.copyWith(
-                        color: AppColors.neutralN500,
-                        fontSize: 12,
-                        height: 1.1,
-                      ),
+                        if (showAnnualFee && offer.annualFee != null)
+                          TextSpan(text: 'Annual fee: ${offer.annualFee}'),
+                      ],
                     ),
-                    Text(
-                      offer.creditLimit,
-                      style: AppTextStyles.spaceGrotesk(
-                        fontSize: 28,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    if (showApr) ...[
-                      const SizedBox(height: 4),
-                      Text(
-                        'APR ${offer.apr}',
-                        style: AppTextStyles.bodySmall.copyWith(
-                          color: AppColors.neutralN500,
-                          fontSize: 13,
-                        ),
-                      ),
-                    ],
-                  ],
-
-                  if (showViewTerms) ...[
-                    const SizedBox(height: AppSpacing.sm),
-
-                    // View terms link
-                    GestureDetector(
-                      onTap: () => _showTerms(context),
-                      child: Text(
-                        'View terms',
-                        style: AppTextStyles.bodySmall.copyWith(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
-                          color: AppColors.contentDisabled,
-                          decoration: TextDecoration.underline,
-                          decorationColor: AppColors.contentDisabled,
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ],
-              ),
-            ),
+              ],
 
-            const SizedBox(width: AppSpacing.md),
-
-            // ── Card image ───────────────────────────────
-            ClipRRect(
-              borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
-              child: SvgPicture.asset(
-                offer.imagePath,
-                width: 80 * imageScale,
-                height: 56 * imageScale,
-                fit: BoxFit.cover,
-              ),
-            ),
+              if (showViewTerms) ...[
+                const SizedBox(height: AppSpacing.sm),
+                GestureDetector(
+                  onTap: () => _showTerms(context),
+                  child: Text(
+                    'View terms',
+                    style: AppTextStyles.bodySmall.copyWith(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 12,
+                      color: AppColors.contentDisabled,
+                      decoration: TextDecoration.underline,
+                      decorationColor: AppColors.contentDisabled,
+                    ),
+                  ),
+                ),
+              ],
+            ],
           ],
-        ),
+        ),   // end outer Column
       ),
     );
   }

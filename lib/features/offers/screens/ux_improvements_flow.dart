@@ -8,11 +8,11 @@ import '../../../design_system/design_system.dart';
 // bottom step indicator, and remove the "X → back to Hub" close button.
 //
 // Flow (5 screens):
-//   1. Personal Information   — no step bar (pre-photo step)
-//   2. Vehicle Photos         — step 1 of 4 (educational tips)
-//   3. Front of Title Photo   — step 2 of 4 (educational tips)
-//   4. Back of Title Photo    — step 3 of 4 (educational tips)
-//   5. Vehicle Photos         — step 4 of 4 (photo grid / submitted)
+//   1. Vehicle Photos         — step 1 of 5 (educational tips)
+//   2. Front of Title Photo   — step 2 of 5 (title photo tips)
+//   3. Back of Title Photo    — step 3 of 5 (title photo tips)
+//   4. Vehicle Photos         — step 4 of 5 (photo grid / submitted)
+//   5. Personal Information   — step 5 of 5 (confirm details)
 // ─────────────────────────────────────────────────────────────────────────────
 
 class UxImprovementsFlow extends StatefulWidget {
@@ -23,7 +23,7 @@ class UxImprovementsFlow extends StatefulWidget {
 }
 
 class _UxImprovementsFlowState extends State<UxImprovementsFlow> {
-  int _step = 0; // 0 = Personal Info, 1-4 = photo steps
+  int _step = 0; // 0-3 = photo steps, 4 = Personal Info
 
   void _next() => setState(() => _step = (_step + 1).clamp(0, 4));
   void _back() {
@@ -37,11 +37,14 @@ class _UxImprovementsFlowState extends State<UxImprovementsFlow> {
   @override
   Widget build(BuildContext context) {
     return switch (_step) {
-      0 => _PersonalInfoScreen(onNext: _next, onBack: _back),
-      1 => _VehiclePhotoEdScreen(onNext: _next, onBack: _back),
-      2 => _FrontTitleScreen(onNext: _next, onBack: _back),
-      3 => _BackTitleScreen(onNext: _next, onBack: _back),
-      _ => _VehiclePhotoGridScreen(onBack: _back),
+      0 => _VehiclePhotoEdScreen(onNext: _next, onBack: _back),    // 1/6
+      1 => _VehiclePhotoGridScreen(onNext: _next, onBack: _back),  // 2/6
+      2 => _FrontTitleScreen(onNext: _next, onBack: _back),        // 3/6
+      3 => _BackTitleScreen(onNext: _next, onBack: _back),         // 4/6
+      _ => _PersonalInfoScreen(                                     // 5/6
+          onNext: () => Navigator.of(context).pop(),
+          onBack: _back,
+        ),
     };
   }
 }
@@ -50,31 +53,73 @@ class _UxImprovementsFlowState extends State<UxImprovementsFlow> {
 // Airbnb-style bottom step progress bar
 // ─────────────────────────────────────────────────────────────────────────────
 
-class _StepBar extends StatelessWidget {
-  const _StepBar({required this.current, required this.total});
+// ─────────────────────────────────────────────────────────────────────────────
+// White sticky footer shell — white bg + soft top shadow
+// ─────────────────────────────────────────────────────────────────────────────
 
-  /// current: 1-indexed step that is IN PROGRESS (current and before = filled)
+/// White sticky footer shell.
+/// Draws the continuous progress bar flush at its top edge, then the child.
+class _StickyFooterShell extends StatelessWidget {
+  const _StickyFooterShell({
+    required this.child,
+    required this.current,
+    required this.total,
+  });
+  final Widget child;
   final int current;
   final int total;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
+    final bottomPad = MediaQuery.of(context).padding.bottom;
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Color(0x18000000),
+            blurRadius: 16,
+            offset: Offset(0, -4),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Continuous progress bar — flush at the very top of the shell
+          _StepBar(current: current, total: total),
+          child,
+          SizedBox(height: bottomPad),
+        ],
+      ),
+    );
+  }
+}
+
+/// Single continuous progress bar — no gaps, edge-to-edge width.
+/// [current] filled (orange), remaining unfilled (neutralN100).
+class _StepBar extends StatelessWidget {
+  const _StepBar({required this.current, required this.total});
+  final int current;
+  final int total;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 3,
       child: Row(
-        children: List.generate(total, (i) {
-          final filled = i < current;
-          return Expanded(
-            child: Container(
-              margin: EdgeInsets.only(left: i == 0 ? 0 : 4),
-              height: 3,
-              decoration: BoxDecoration(
-                color: filled ? AppColors.primaryO400 : AppColors.neutralN100,
-                borderRadius: BorderRadius.circular(2),
-              ),
+        children: [
+          if (current > 0)
+            Flexible(
+              flex: current,
+              child: Container(color: AppColors.primaryO400),
             ),
-          );
-        }),
+          if (current < total)
+            Flexible(
+              flex: total - current,
+              child: Container(color: AppColors.neutralN100),
+            ),
+        ],
       ),
     );
   }
@@ -182,16 +227,26 @@ class _PersonalInfoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return KBaseScreenMultiLayout(
       showStatusBar: true,
-      appBar: AppNavBar.logo(
+      contentPadding: 0,
+      contentBackgroundColor: AppColors.white,
+      appBar: AppNavBar(
+        showLogo: true,
         onBack: onBack,
         backgroundColor: AppColors.white,
       ),
       hasStickyFooter: true,
-      footer: AppStickyBottomBar(
-        primaryLabel: 'Submit',
-        primaryVariant: AppButtonVariant.primary,
-        onPrimary: onNext,
-        backgroundColor: AppColors.white,
+      footer: _StickyFooterShell(
+        current: 5,
+        total: 6,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+          child: AppButton(
+            label: 'Save and continue',
+            variant: AppButtonVariant.primary,
+            onPressed: onNext,
+            isFullWidth: true,
+          ),
+        ),
       ),
       content: [
         const SizedBox(height: AppSpacing.lg),
@@ -200,7 +255,7 @@ class _PersonalInfoScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screenPaddingH),
           child: Text(
             'Personal information',
-            style: AppTextStyles.heading2,
+            style: AppTextStyles.heading3,
           ),
         ),
 
@@ -222,7 +277,7 @@ class _PersonalInfoScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screenPaddingH),
           child: AppTextField(
             label: 'Birthday',
-            initialValue: 'January 1, 1990',
+            hint: 'January 1, 1990',
             readOnly: true,
             suffixIcon: const Icon(Icons.calendar_today, size: 20),
           ),
@@ -259,35 +314,32 @@ class _VehiclePhotoEdScreen extends StatelessWidget {
     return KBaseScreenMultiLayout(
       showStatusBar: true,
       contentPadding: 0,
-      appBar: AppNavBar.logo(
+      contentBackgroundColor: AppColors.white,
+      appBar: AppNavBar(
+        showLogo: true,
         onBack: onBack,
         backgroundColor: AppColors.white,
       ),
       hasStickyFooter: true,
-      footer: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _StepBar(current: 1, total: 4),
-          _ReminderBanner(
-            message: "Not with your car or can't take a clear photos of your car right now?",
+      footer: _StickyFooterShell(
+        current: 1,
+        total: 6,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+          child: AppButton(
+            label: 'Take Photo',
+            variant: AppButtonVariant.primary,
+            onPressed: onNext,
+            isFullWidth: true,
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
-            child: AppButton(
-              label: 'Take Photo',
-              variant: AppButtonVariant.primary,
-              onPressed: onNext,
-              fullWidth: true,
-            ),
-          ),
-        ],
+        ),
       ),
       content: [
         const SizedBox(height: AppSpacing.lg),
 
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screenPaddingH),
-          child: Text('Vehicle photos', style: AppTextStyles.heading2),
+          child: Text('Vehicle photos', style: AppTextStyles.heading3),
         ),
 
         const SizedBox(height: AppSpacing.xs),
@@ -307,8 +359,10 @@ class _VehiclePhotoEdScreen extends StatelessWidget {
           child: Text(
             'See example',
             style: AppTextStyles.bodyRegular.copyWith(
-              color: AppColors.primaryO400,
+              color: AppColors.navy,
               fontWeight: FontWeight.w500,
+              decoration: TextDecoration.underline,
+              decorationColor: AppColors.navy,
             ),
           ),
         ),
@@ -318,6 +372,12 @@ class _VehiclePhotoEdScreen extends StatelessWidget {
         const _InfoTile(icon: Icons.photo_camera_outlined, label: 'Wipe your camera lens clean'),
         const _InfoTile(icon: Icons.wb_sunny_outlined, label: 'Ensure vehicle is in a well lit environment'),
         const _InfoTile(icon: Icons.image_outlined, label: 'Ensure photos are clear and not blurry', divider: false),
+
+        const SizedBox(height: AppSpacing.md),
+
+        _ReminderBanner(
+          message: "Not with your car or can't take clear photos of your car right now?",
+        ),
       ],
     );
   }
@@ -337,7 +397,7 @@ class _FrontTitleScreen extends StatelessWidget {
     return _TitlePhotoScreen(
       title: 'Front of title photo',
       subtitle: 'Please upload the front of your vehicle title',
-      step: 2,
+      step: 3,
       onNext: onNext,
       onBack: onBack,
     );
@@ -358,7 +418,7 @@ class _BackTitleScreen extends StatelessWidget {
     return _TitlePhotoScreen(
       title: 'Back of title photo',
       subtitle: 'Please upload back of your vehicle title',
-      step: 3,
+      step: 4,
       onNext: onNext,
       onBack: onBack,
     );
@@ -386,42 +446,47 @@ class _TitlePhotoScreen extends StatelessWidget {
     return KBaseScreenMultiLayout(
       showStatusBar: true,
       contentPadding: 0,
-      appBar: AppNavBar.logo(
+      contentBackgroundColor: AppColors.white,
+      appBar: AppNavBar(
+        showLogo: true,
         onBack: onBack,
         backgroundColor: AppColors.white,
       ),
       hasStickyFooter: true,
-      footer: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _StepBar(current: step, total: 4),
-          _ReminderBanner(message: "Can't take a clear photo of your title right now?"),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
-            child: AppButton(
-              label: 'Take Photo',
-              variant: AppButtonVariant.primary,
-              onPressed: onNext,
-              fullWidth: true,
+      footer: _StickyFooterShell(
+        current: step,
+        total: 6,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 12, 20, 8),
+              child: AppButton(
+                label: 'Take Photo',
+                variant: AppButtonVariant.primary,
+                onPressed: onNext,
+                isFullWidth: true,
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-            child: AppButton(
-              label: "I don't have my title",
-              variant: AppButtonVariant.tertiary,
-              onPressed: () {},
-              fullWidth: true,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
+              child: Center(
+                child: AppButton(
+                  label: "I don't have my title",
+                  variant: AppButtonVariant.link,
+                  onPressed: () {},
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       content: [
         const SizedBox(height: AppSpacing.lg),
 
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screenPaddingH),
-          child: Text(title, style: AppTextStyles.heading2),
+          child: Text(title, style: AppTextStyles.heading3),
         ),
 
         const SizedBox(height: AppSpacing.xs),
@@ -439,6 +504,10 @@ class _TitlePhotoScreen extends StatelessWidget {
         const _InfoTile(icon: Icons.image_outlined, label: 'Take clear and crisp photos'),
         const _InfoTile(icon: Icons.text_fields, label: 'Make sure text is clear and easy to read'),
         const _InfoTile(icon: Icons.photo_camera_outlined, label: 'Wipe your camera lens clean', divider: false),
+
+        const SizedBox(height: AppSpacing.md),
+
+        _ReminderBanner(message: "Can't take a clear photo of your title right now?"),
       ],
     );
   }
@@ -449,8 +518,9 @@ class _TitlePhotoScreen extends StatelessWidget {
 // ─────────────────────────────────────────────────────────────────────────────
 
 class _VehiclePhotoGridScreen extends StatelessWidget {
-  const _VehiclePhotoGridScreen({required this.onBack});
+  const _VehiclePhotoGridScreen({required this.onBack, required this.onNext});
   final VoidCallback onBack;
+  final VoidCallback onNext;
 
   static const _photoColors = [
     Color(0xFF1A1A2E),
@@ -467,50 +537,32 @@ class _VehiclePhotoGridScreen extends StatelessWidget {
     return KBaseScreenMultiLayout(
       showStatusBar: true,
       contentPadding: 0,
-      appBar: AppNavBar.logo(
+      contentBackgroundColor: AppColors.white,
+      appBar: AppNavBar(
+        showLogo: true,
         onBack: onBack,
         backgroundColor: AppColors.white,
       ),
       hasStickyFooter: true,
-      footer: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _StepBar(current: 4, total: 4),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
-            child: Row(
-              children: [
-                const Icon(Icons.signal_cellular_alt, size: 16, color: AppColors.neutralN500),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    'Ensure your network is strong before submitting photos',
-                    style: AppTextStyles.bodySmall.copyWith(
-                      fontSize: 12,
-                      color: AppColors.neutralN500,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+      footer: _StickyFooterShell(
+        current: 2,
+        total: 6,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+          child: AppButton(
+            label: 'Save and submit photos',
+            variant: AppButtonVariant.primary,
+            onPressed: onNext,
+            isFullWidth: true,
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
-            child: AppButton(
-              label: 'Submit photos',
-              variant: AppButtonVariant.primary,
-              onPressed: () {},
-              fullWidth: true,
-            ),
-          ),
-        ],
+        ),
       ),
       content: [
         const SizedBox(height: AppSpacing.lg),
 
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screenPaddingH),
-          child: Text('Vehicle photos', style: AppTextStyles.heading2),
+          child: Text('Vehicle photos', style: AppTextStyles.heading3),
         ),
 
         const SizedBox(height: AppSpacing.xl),
@@ -546,6 +598,29 @@ class _VehiclePhotoGridScreen extends StatelessWidget {
             ],
           ),
         ),
+
+        const SizedBox(height: AppSpacing.md),
+
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screenPaddingH),
+          child: Row(
+            children: [
+              const Icon(Icons.signal_cellular_alt, size: 16, color: AppColors.neutralN500),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'Ensure your network is strong before submitting photos',
+                  style: AppTextStyles.bodySmall.copyWith(
+                    fontSize: 12,
+                    color: AppColors.neutralN500,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        const SizedBox(height: AppSpacing.sm),
       ],
     );
   }

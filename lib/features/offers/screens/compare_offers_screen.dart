@@ -33,14 +33,11 @@ class CompareOffersScreen extends StatelessWidget {
   /// The [offers] param is kept for API compatibility — the table always
   /// shows all 4 products per the product comparison spec.
   static Widget buildComparisonTable(List<CardOffer> offers) {
-    // Show the 3 pre-approved products only
-    final products = YendoOffers.all;
+    final products = offers.isNotEmpty ? offers : YendoOffers.all;
 
-    final options = [
-      'Express\nPreferred\nRewards',
-      'Keystone\nReserve\nRewards',
-      'Flex\nPreferred\nRewards',
-    ];
+    final options = products
+        .map((o) => o.name.split(' ').join('\n'))
+        .toList();
 
     final rows = [
       ComparisonRow(
@@ -59,11 +56,35 @@ class CompareOffersScreen extends StatelessWidget {
         label: 'Rewards',
         values: products.map((o) => o.rewardsLine).toList(),
       ),
+      ComparisonRow(
+        label: 'Powered\nby',
+        values: products.map((o) {
+          if (o.name == 'Platinum Rewards') return 'Vehicle';
+          if (o.name == 'Signature Rewards') return 'Home fixture*';
+          return 'N/A';
+        }).toList(),
+      ),
     ];
 
-    return AppComparisonTable.threeColumn(
-      options: options,
-      rows: rows,
+    final table = products.length == 2
+        ? AppComparisonTable.twoColumn(options: options, rows: rows)
+        : AppComparisonTable.threeColumn(options: options, rows: rows);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        table,
+        const SizedBox(height: 16),
+        Text(
+          '*Home fixture examples include cabinets and HVACs.',
+          style: TextStyle(
+            fontFamily: 'PPNeueMontreal',
+            fontSize: 12,
+            color: Color(0xFF6B7A8D),
+            height: 1.4,
+          ),
+        ),
+      ],
     );
   }
 }

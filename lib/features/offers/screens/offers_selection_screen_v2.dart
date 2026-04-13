@@ -30,6 +30,12 @@ class _OffersSelectionScreenV2State extends State<OffersSelectionScreenV2> {
   CardOffer? _selectedOffer;
 
   @override
+  void initState() {
+    super.initState();
+    _selectedOffer = widget.offers.first;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return YendoConfetti.wrap(
       backgroundColor: AppColors.white,
@@ -165,7 +171,7 @@ class _OffersSelectionScreenV2State extends State<OffersSelectionScreenV2> {
                 child: Row(
                   children: [
                     Text(
-                      'Compare your credit card offers',
+                      'Compare credit cards',
                       style: AppTextStyles.heading3.copyWith(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
@@ -325,6 +331,12 @@ class _OffersSelectionScreenV3State extends State<OffersSelectionScreenV3> {
   CardOffer? _selectedOffer;
 
   @override
+  void initState() {
+    super.initState();
+    _selectedOffer = widget.offers.first;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return YendoConfetti.wrap(
       backgroundColor: AppColors.neutralN50,
@@ -431,7 +443,7 @@ class _OffersSelectionScreenV3State extends State<OffersSelectionScreenV3> {
                 child: Row(
                   children: [
                     Text(
-                      'Compare your credit card offers',
+                      'Compare credit cards',
                       style: AppTextStyles.heading3.copyWith(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,

@@ -4,43 +4,27 @@ import '../colors.dart';
 
 // ── Yendo Confetti ──────────────────────────────────────────────────────────
 //
-// Fintech-grade celebration animation. Deliberately restrained:
-//   • Brand colors only (orange, green, yellow, navy tints)
-//   • Small geometric particles — dots & thin ribbons, no stars/triangles
-//   • Single burst that plays once, fades out cleanly
-//   • Sits in an IgnorePointer overlay so it never blocks taps
+// Cannon-burst confetti: two cannons fire simultaneously from the top-left
+// and top-right corners. Particles arc inward across the screen under gravity
+// and naturally exit off the bottom and sides.
 //
 // Usage:
-//   Stack(children: [
-//     YourScreen(),
-//     const YendoConfetti(),           // auto-plays on mount
-//   ])
-//
-// Or wrap a screen with it:
 //   YendoConfetti.wrap(child: YourScreen())
 
 class YendoConfetti extends StatefulWidget {
-  const YendoConfetti({super.key, this.particleCount = 72});
+  const YendoConfetti({super.key, this.particleCount = 80});
 
-  /// Total number of particles in the burst.
   final int particleCount;
 
-  /// Convenience wrapper — confetti sits BEHIND [child].
-  /// [backgroundColor] fills the bottom of the stack so the screen
-  /// colour is preserved when the child uses a transparent background.
   static Widget wrap({
     required Widget child,
-    int particleCount = 72,
-    Color backgroundColor = const Color(0xFFF5F7FA), // AppColors.neutralN50
+    int particleCount = 80,
+    Color backgroundColor = const Color(0xFFF5F7FA),
   }) {
     return Stack(
       children: [
-        // Solid background so transparent-scaffold screens don't go black
         Positioned.fill(child: ColoredBox(color: backgroundColor)),
-        // Confetti in the background layer
         YendoConfetti(particleCount: particleCount),
-        // Screen content on top — cards/bars with solid fills block confetti;
-        // transparent padding areas let it show through
         child,
       ],
     );
@@ -53,32 +37,37 @@ class YendoConfetti extends StatefulWidget {
 class _YendoConfettiState extends State<YendoConfetti>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
+  late final Animation<double> _animation;
   late final List<_Particle> _particles;
   final math.Random _rng = math.Random();
 
-  // Brand palette — same saturation/lightness family, no off-brand colors
   static const _colors = [
-    AppColors.primaryO400, // signature orange
-    AppColors.primaryO300, // light orange
-    AppColors.green400, // success green
-    AppColors.yellow400, // warm yellow
-    Color(0xFF1A2B5C), // navy tint (lighter than navy for visibility)
-    AppColors.neutralN200, // soft gray-blue — grounds the palette
+    AppColors.primaryO400,
+    AppColors.primaryO300,
+    AppColors.green400,
+    AppColors.yellow400,
+    Color(0xFF1A2B5C),
+    AppColors.neutralN200,
   ];
+
+  static const double _totalSec = 5.0;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 2600),
+      duration: Duration(milliseconds: (_totalSec * 1000).round()),
+    );
+    _animation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeIn,
     );
     _particles = [];
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       final size = MediaQuery.of(context).size;
       _buildParticles(size);
-      // setState so the AnimatedBuilder re-renders with the real particles
       setState(() {});
       _controller.forward();
     });
@@ -86,26 +75,42 @@ class _YendoConfettiState extends State<YendoConfetti>
 
   void _buildParticles(Size size) {
     _particles.clear();
-    final cx = size.width / 2;
-    for (int i = 0; i < widget.particleCount; i++) {
-      // Spread origin slightly around center-top so burst feels natural
-      final ox = cx + _rng.nextDouble() * 80 - 40;
-      final oy = -10.0;
+    final half = widget.particleCount ~/ 2;
 
-      // Wide fan angle so particles scatter across the full screen width
-      final angle = math.pi / 2 + (_rng.nextDouble() - 0.5) * math.pi * 1.1;
-      // Slower speed so particles are still on-screen when they freeze
-      final speed = 120 + _rng.nextDouble() * 160;
+    for (int i = 0; i < widget.particleCount; i++) {
+      final isLeft = i < half;
+
+      // Cannon mouth: tight cluster near each top corner
+      final ox = isLeft
+          ? _rng.nextDouble() * 16
+          : size.width - _rng.nextDouble() * 16;
+      final oy = _rng.nextDouble() * 20;
+
+      // Speed: faster particles arc further across the screen
+      final speed = 220.0 + _rng.nextDouble() * 160;
+
+      // Angle:
+      //   Left cannon  — shoot rightward, spread from ~-25° (slightly up)
+      //                  to ~+55° (downward), centred on ~+15°
+      //   Right cannon — mirror image (shoot leftward)
+      double angle;
+      if (isLeft) {
+        // radians: 0 = right, positive = down in Flutter
+        angle = (-0.44 + _rng.nextDouble() * 1.38); // ~-25° to +55°
+      } else {
+        angle = math.pi - (-0.44 + _rng.nextDouble() * 1.38);
+      }
 
       _particles.add(_Particle(
         origin: Offset(ox, oy),
-        velocity: Offset(math.cos(angle) * speed, math.sin(angle) * speed),
+        vx: speed * math.cos(angle),
+        vy: speed * math.sin(angle),
         color: _colors[_rng.nextInt(_colors.length)],
-        shape: _rng.nextBool() ? _Shape.dot : _Shape.ribbon,
-        size: _rng.nextDouble() * 5 + 4, // 4–9 px
-        rotationSpeed: (_rng.nextDouble() - 0.5) * 8,
-        horizontalDrift: (_rng.nextDouble() - 0.5) * 60,
-        phaseOffset: _rng.nextDouble() * 0.2, // stagger start slightly
+        shape: _Shape.values[_rng.nextInt(_Shape.values.length)],
+        size: _rng.nextDouble() * 5 + 4,
+        rotationSpeed: (_rng.nextDouble() - 0.5) * 12,
+        // Very short stagger — feels like a simultaneous burst, not rain
+        phaseOffset: _rng.nextDouble() * 0.06,
       ));
     }
   }
@@ -121,15 +126,14 @@ class _YendoConfettiState extends State<YendoConfetti>
     return Positioned.fill(
       child: IgnorePointer(
         child: AnimatedBuilder(
-          animation: _controller,
-          builder: (_, __) {
-            return CustomPaint(
-              painter: _ConfettiPainter(
-                particles: _particles,
-                progress: _controller.value,
-              ),
-            );
-          },
+          animation: _animation,
+          builder: (context, _) => CustomPaint(
+            painter: _ConfettiPainter(
+              particles: _particles,
+              progress: _animation.value,
+              totalSec: _totalSec,
+            ),
+          ),
         ),
       ),
     );
@@ -138,28 +142,28 @@ class _YendoConfettiState extends State<YendoConfetti>
 
 // ── Particle model ───────────────────────────────────────────────────────────
 
-enum _Shape { dot, ribbon }
+enum _Shape { dot, ribbon, square }
 
 class _Particle {
   const _Particle({
     required this.origin,
-    required this.velocity,
+    required this.vx,
+    required this.vy,
     required this.color,
     required this.shape,
     required this.size,
     required this.rotationSpeed,
-    required this.horizontalDrift,
     required this.phaseOffset,
   });
 
   final Offset origin;
-  final Offset velocity;
+  final double vx;
+  final double vy;
   final Color color;
   final _Shape shape;
   final double size;
   final double rotationSpeed;
-  final double horizontalDrift; // subtle sine-wave side drift
-  final double phaseOffset; // [0, 0.25] — staggered entry
+  final double phaseOffset;
 }
 
 // ── Painter ──────────────────────────────────────────────────────────────────
@@ -168,76 +172,69 @@ class _ConfettiPainter extends CustomPainter {
   const _ConfettiPainter({
     required this.particles,
     required this.progress,
+    required this.totalSec,
   });
 
   final List<_Particle> particles;
-  final double progress; // 0.0 → 1.0
+  final double progress;
+  final double totalSec;
 
-  // Gravity acceleration (pixels/s²) — gentle so particles land on-screen
-  static const double _gravity = 140;
-
-  // Particles stop moving at this progress point, then fade to resting state.
-  // Keeps them on-screen so the persistence effect is actually visible.
-  static const double _freezeAt = 0.55;
-  static const double _fadeEnd = 0.75; // tighter window = snappier settle
-  static const double _persistentAlpha = 0.25;
+  // Gravity — strong enough to produce a visible arc within the screen height
+  static const double _gravity = 260;
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()..style = PaintingStyle.fill;
 
     for (final p in particles) {
-      // Each particle has its own local progress after its phase offset
-      final t = ((progress - p.phaseOffset) / (1.0 - p.phaseOffset))
-          .clamp(0.0, 1.0);
-      if (t <= 0) continue;
+      final dt = math.max(0.0, (progress - p.phaseOffset) * totalSec);
+      if (dt <= 0) continue;
 
-      // Physics: freeze position at _freezeAt so particles stay on-screen
-      final tPhysics = math.min(t, _freezeAt);
-      final dt = tPhysics * 1.4; // map 0-0.55 to 0-0.77 s
-      final x = p.origin.dx +
-          p.velocity.dx * dt +
-          p.horizontalDrift * math.sin(dt * math.pi);
-      final y = p.origin.dy +
-          p.velocity.dy * dt +
-          0.5 * _gravity * dt * dt;
+      // Projectile motion: x is linear, y accelerates under gravity
+      final x = p.origin.dx + p.vx * dt;
+      final y = p.origin.dy + p.vy * dt + 0.5 * _gravity * dt * dt;
 
-      // Opacity: full during burst → ease-out fade → hold at persistent alpha.
-      // Ease-out curve (t²·(3-2t) = smoothstep) drops quickly then glides in,
-      // eliminating the mechanical linear-fade lag.
-      final opacity = t < _freezeAt
+      // Fade out in the last 30% of each particle's lifespan
+      final maxDt = (1.0 - p.phaseOffset) * totalSec;
+      final lifeProgress = dt / maxDt;
+      final opacity = lifeProgress < 0.70
           ? 1.0
-          : t < _fadeEnd
-              ? () {
-                  final raw = (t - _freezeAt) / (_fadeEnd - _freezeAt);
-                  // smoothstep: fast start, gentle landing
-                  final curved = raw * raw * (3.0 - 2.0 * raw);
-                  return 1.0 - (1.0 - _persistentAlpha) * curved;
-                }()
-              : _persistentAlpha;
+          : (1.0 - (lifeProgress - 0.70) / 0.30).clamp(0.0, 1.0);
+
+      if (opacity <= 0) continue;
 
       paint.color = p.color.withValues(alpha: opacity);
-      final rotation = p.rotationSpeed * dt;
 
+      final rotation = p.rotationSpeed * dt;
       canvas.save();
       canvas.translate(x, y);
       canvas.rotate(rotation);
 
-      if (p.shape == _Shape.dot) {
-        canvas.drawCircle(Offset.zero, p.size / 2, paint);
-      } else {
-        // Ribbon: thin elongated rectangle
-        canvas.drawRRect(
-          RRect.fromRectAndRadius(
+      switch (p.shape) {
+        case _Shape.dot:
+          canvas.drawCircle(Offset.zero, p.size / 2, paint);
+        case _Shape.ribbon:
+          canvas.drawRRect(
+            RRect.fromRectAndRadius(
+              Rect.fromCenter(
+                center: Offset.zero,
+                width: p.size * 0.4,
+                height: p.size * 2.6,
+              ),
+              const Radius.circular(1),
+            ),
+            paint,
+          );
+        case _Shape.square:
+          final half = p.size * 0.45;
+          canvas.drawRect(
             Rect.fromCenter(
               center: Offset.zero,
-              width: p.size * 0.45,
-              height: p.size * 2.4,
+              width: half * 2,
+              height: half * 2,
             ),
-            const Radius.circular(1),
-          ),
-          paint,
-        );
+            paint,
+          );
       }
 
       canvas.restore();

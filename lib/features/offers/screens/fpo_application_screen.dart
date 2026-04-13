@@ -4,13 +4,16 @@ import '../../../main.dart';
 import '../models/card_offer.dart';
 import 'downsell_screen.dart';
 import 'denial_screen.dart';
-import 'homeowner_denial_screen.dart';
 import 'offers_selection_screen.dart';
 import 'offers_selection_screen_v2.dart';
 import 'verification_hub_screen.dart';
 import 'offers_selection_screen_bundle.dart';
 import 'offers_selection_screen_v4.dart';
 import 'offers_selection_screen_single.dart';
+import 'offers_selection_screen_vh.dart';
+import 'offers_selection_screen_vh2.dart';
+import 'offers_selection_screen_cashback.dart';
+import 'offers_selection_screen_single_cashback.dart';
 import 'ux_improvements_flow.dart';
 
 /// Application Funnel — navigation hub for all design explorations
@@ -33,7 +36,9 @@ class FpoApplicationScreen extends StatelessWidget {
     return KBaseScreenMultiLayout(
       showStatusBar: true,
       contentBackgroundColor: const Color(0xFFFFF3E0),
-      appBar: const AppNavBar.logo(),
+      appBar: AppNavBar.logo(
+        onBack: () => Navigator.of(context).pop(),
+      ),
       content: [
         const SizedBox(height: AppSpacing.md),
 
@@ -72,27 +77,13 @@ class FpoApplicationScreen extends StatelessWidget {
         const SizedBox(height: AppSpacing.sm),
 
         _OutcomeButton(
-          label: '🆕  Verification Hub Update',
-          sublabel: 'Welcome + offer card + 3-step progress',
-          color: AppColors.green400,
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => const VerificationHubScreen(),
-            ),
-          ),
-        ),
-
-        const SizedBox(height: AppSpacing.sm),
-
-        _OutcomeButton(
-          label: '🎨  Option A — Credit Emphasis - no APR',
-          sublabel: 'Credit limit hero · no APR · centered view terms',
+          label: '🎛  Control: APR/Fees',
+          sublabel: '"Claim your offer" → Verification Hub bottom sheet',
           color: AppColors.blue400,
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => OffersSelectionScreenV4(offers: allOffers),
+              builder: (_) => OffersSelectionScreenVH(offers: allOffers),
             ),
           ),
         ),
@@ -100,13 +91,13 @@ class FpoApplicationScreen extends StatelessWidget {
         const SizedBox(height: AppSpacing.sm),
 
         _OutcomeButton(
-          label: '🎨  Option B — Multiple offers',
-          sublabel: 'Congratulations · bullet list layout',
+          label: '🎛  VH Option 2',
+          sublabel: 'Card image + pre-approval summary in VH bottom sheet',
           color: AppColors.blue400,
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => OffersSelectionScreen(offers: allOffers),
+              builder: (_) => OffersSelectionScreenVH2(offers: allOffers),
             ),
           ),
         ),
@@ -114,13 +105,14 @@ class FpoApplicationScreen extends StatelessWidget {
         const SizedBox(height: AppSpacing.sm),
 
         _OutcomeButton(
-          label: '🎨  Option C — Multiple offers',
-          sublabel: 'Congratulations · big bold credit limit layout',
+          label: '💸  Variant: Cash back/Powered',
+          sublabel: '1.5% cash back · powered by your car/home',
           color: AppColors.blue400,
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => OffersSelectionScreenV2(offers: allOffers),
+              builder: (_) =>
+                  OffersSelectionScreenCashback(offers: allOffers),
             ),
           ),
         ),
@@ -128,13 +120,27 @@ class FpoApplicationScreen extends StatelessWidget {
         const SizedBox(height: AppSpacing.sm),
 
         _OutcomeButton(
-          label: '🎨  Option D — One Offer Only',
-          sublabel: 'Single offer · inline TILA terms · no compare',
+          label: '🃏  Single offer — Control: APR/Fees',
+          sublabel: 'Single offer · APR · inline TILA terms · no compare',
           color: AppColors.blue400,
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
               builder: (_) => const OffersSelectionScreenSingle(),
+            ),
+          ),
+        ),
+
+        const SizedBox(height: AppSpacing.sm),
+
+        _OutcomeButton(
+          label: '🃏  Single offer — Variant: Cash back/Powered',
+          sublabel: '1.5% cash back* · Powered by your car · inline TILA',
+          color: AppColors.blue400,
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const OffersSelectionScreenSingleCashback(),
             ),
           ),
         ),
@@ -160,20 +166,6 @@ class FpoApplicationScreen extends StatelessWidget {
         const SizedBox(height: AppSpacing.md),
 
         _SectionHeader(label: 'Rejections and denials'),
-
-        const SizedBox(height: AppSpacing.sm),
-
-        _OutcomeButton(
-          label: '🏠  Homeowner denial — no other offer',
-          sublabel: 'Not listed as owner on property',
-          color: AppColors.neutralN500,
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => const HomeownerDenialScreen(),
-            ),
-          ),
-        ),
 
         const SizedBox(height: AppSpacing.sm),
 
@@ -270,6 +262,70 @@ class FpoApplicationScreen extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (_) => const ShowcaseHome(),
+            ),
+          ),
+        ),
+
+        const SizedBox(height: AppSpacing.xl),
+
+        // ── Section: Archive ───────────────────────────────
+        const Divider(color: AppColors.neutralN100, height: 1),
+        const SizedBox(height: AppSpacing.md),
+
+        _SectionHeader(label: 'Archive'),
+
+        const SizedBox(height: AppSpacing.sm),
+
+        _OutcomeButton(
+          label: '🆕  Verification Hub Update',
+          sublabel: 'Welcome + offer card + 3-step progress',
+          color: AppColors.neutralN200,
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const VerificationHubScreen(),
+            ),
+          ),
+        ),
+
+        const SizedBox(height: AppSpacing.sm),
+
+        _OutcomeButton(
+          label: '🎨  Option A — Credit Emphasis - no APR',
+          sublabel: 'Credit limit hero · no APR · centered view terms',
+          color: AppColors.neutralN200,
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => OffersSelectionScreenV4(offers: allOffers),
+            ),
+          ),
+        ),
+
+        const SizedBox(height: AppSpacing.sm),
+
+        _OutcomeButton(
+          label: '🎨  Option B — Multiple offers',
+          sublabel: 'Congratulations · bullet list layout',
+          color: AppColors.neutralN200,
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => OffersSelectionScreen(offers: allOffers),
+            ),
+          ),
+        ),
+
+        const SizedBox(height: AppSpacing.sm),
+
+        _OutcomeButton(
+          label: '🎨  Option C — Multiple offers',
+          sublabel: 'Congratulations · big bold credit limit layout',
+          color: AppColors.neutralN200,
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => OffersSelectionScreenV2(offers: allOffers),
             ),
           ),
         ),

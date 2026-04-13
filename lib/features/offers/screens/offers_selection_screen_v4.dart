@@ -30,6 +30,12 @@ class _OffersSelectionScreenV4State extends State<OffersSelectionScreenV4> {
   CardOffer? _selectedOffer;
 
   @override
+  void initState() {
+    super.initState();
+    _selectedOffer = widget.offers.first;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return YendoConfetti.wrap(
       backgroundColor: AppColors.neutralN50,
@@ -44,10 +50,10 @@ class _OffersSelectionScreenV4State extends State<OffersSelectionScreenV4> {
         ),
         hasStickyFooter: true,
         footer: AppStickyBottomBar(
-          primaryLabel: 'Continue to application',
+          primaryLabel: 'Apply now',
           onPrimary:
               _selectedOffer != null ? () => _onContinue(context) : null,
-          secondaryLabel: 'Compare offers',
+          secondaryLabel: 'Compare credit cards',
           secondaryVariant: AppButtonVariant.link,
           onSecondary: () => _showCompareSheet(context),
           backgroundColor: AppColors.white,
@@ -80,7 +86,7 @@ class _OffersSelectionScreenV4State extends State<OffersSelectionScreenV4> {
 
           const SizedBox(height: AppSpacing.lg),
 
-          // ── Offer cards — taller, smaller image, no APR, no View terms ──
+          // ── Offer cards — taller, smaller image, with APR + Annual Fee ──
           ...widget.offers.asMap().entries.map((e) => Padding(
                 padding: const EdgeInsets.fromLTRB(
                   AppSpacing.screenPaddingH,
@@ -95,30 +101,28 @@ class _OffersSelectionScreenV4State extends State<OffersSelectionScreenV4> {
                   showCreditLimit: true,
                   showBulletPoints: false,
                   showRecommended: e.key == 0,
-                  showApr: false,
+                  showApr: true,
+                  showAnnualFee: true,
                   showViewTerms: false,
-                  extraBottomPadding: 12.0,
+                  extraBottomPadding: 10.0,
                   imageScale: 0.85,
                 ),
               )),
 
-          // ── Centered "View terms" link below cards ───────
+          // ── Centered "View terms" link below cards — always active ──
           Center(
             child: GestureDetector(
-              onTap: _selectedOffer != null
-                  ? () => _showTermsSheet(context, _selectedOffer!)
-                  : null,
+              onTap: () => _showTermsSheet(
+                context,
+                _selectedOffer ?? widget.offers.first,
+              ),
               child: Text(
                 'View terms',
                 style: AppTextStyles.bodySmall.copyWith(
-                  color: _selectedOffer != null
-                      ? AppColors.neutralN500
-                      : AppColors.contentDisabled,
+                  color: AppColors.neutralN500,
                   fontWeight: FontWeight.w500,
                   decoration: TextDecoration.underline,
-                  decorationColor: _selectedOffer != null
-                      ? AppColors.neutralN500
-                      : AppColors.contentDisabled,
+                  decorationColor: AppColors.neutralN500,
                 ),
               ),
             ),

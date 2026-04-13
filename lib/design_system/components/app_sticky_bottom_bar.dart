@@ -80,7 +80,7 @@ class AppStickyBottomBar extends StatelessWidget {
           Padding(
             padding: EdgeInsets.fromLTRB(
               AppSpacing.screenPaddingH,
-              topPadding ?? AppSpacing.xl,
+              topPadding ?? AppSpacing.md,
               AppSpacing.screenPaddingH,
               bottomPadding > 0
                   ? bottomPadding + AppSpacing.xs

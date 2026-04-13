@@ -70,7 +70,7 @@ class HomeownerDenialScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'We were not able to approve you for a Keystone Reserve Rewards.',
+                'We were not able to approve you for a Signature Rewards.',
                 style: AppTextStyles.heading3.copyWith(
                   fontSize: 24,
                   fontWeight: FontWeight.w700,

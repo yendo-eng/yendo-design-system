@@ -38,6 +38,14 @@ class AppColors {
   static const Color red500 = Color(0xFFCC2020);
 
   // ── Blue ───────────────────────────────────────────────
-  static const Color blue400 = Color(0xFF3B82F6);
-  static const Color blue500 = Color(0xFF1D65D8);
+  static const Color blue50  = Color(0xFFF0F6FF);
+  static const Color blue100 = Color(0xFFDBEAFE);
+  static const Color blue200 = Color(0xFFC0DBFE);
+  static const Color blue300 = Color(0xFF94C5FD);
+  static const Color blue400 = Color(0xFF61A6FB);
+  static const Color blue500 = Color(0xFF3B83F6);
+  static const Color blue600 = Color(0xFF2663EB);
+  static const Color blue700 = Color(0xFF1E4ED8);
+  static const Color blue800 = Color(0xFF1F40B0);
+  static const Color blue900 = Color(0xFF1E3B8A);
 }

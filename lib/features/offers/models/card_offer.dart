@@ -19,6 +19,7 @@ class CardOffer {
     required this.rewardsLine,
     required this.collateralType,
     required this.timeToMoney,
+    this.annualFee,
     this.extraValueProp,
   });
 
@@ -35,6 +36,7 @@ class CardOffer {
   final String rewardsLine;
   final String collateralType;
   final String timeToMoney;
+  final String? annualFee;
   final String? extraValueProp;
 
   static List<CardOffer> downsellOptions(
@@ -52,16 +54,17 @@ class YendoOffers {
   static const vehicle = CardOffer(
     id: 'vehicle',
     priority: 1,
-    name: 'Express Preferred Rewards',
+    name: 'Platinum Rewards',
     description: 'Use your vehicle equity to unlock a higher credit limit and earn rewards on every purchase.',
     creditLimit: r'$10,000',
     apr: '29.88%',
     cashAdvanceLimit: r'$400',
     imagePath: 'assets/images/Vehicle.svg',
     bulletPoints: ['Pre-approved up to \$10,000', '1.5% rewards on Autopay'],
-    rewardsLine: '1.5% rewards on Autopay',
+    rewardsLine: '1.5% cash back with Autopay',
     collateralType: 'Backed by Vehicle',
     timeToMoney: 'Time to money: 5 minutes',
+    annualFee: r'$40',
     extraValueProp: 'Build your credit back',
     terms: 'Annual Percentage Rate (APR) for Purchases: 29.88%\n\nAnnual Percentage Rate (APR) for Cash Advances: 29.88%\n\nAnnual Percentage Rate (APR) for Balance Transfers: 29.88%\n\nPaying Interest: Your due date is at least 25 days after the close of each billing cycle. We will not charge you any interest on purchases if you pay your entire balance by the due date each month.\n\nAnnual Fee: \$40, billed on the date of your first transaction, and annually on that date thereafter.\n\nTransaction Fees\nForeign Transactions: 3% of the transaction amount, in U.S. dollars\nBalance Transfers: \$5 or 5% of the amount of balance transfer, whichever is greater',
   );
@@ -69,32 +72,34 @@ class YendoOffers {
   static const home = CardOffer(
     id: 'home',
     priority: 2,
-    name: 'Keystone Reserve Rewards',
+    name: 'Signature Rewards',
     description: 'Leverage your home equity for a competitive credit limit with premium rewards benefits.',
     creditLimit: r'$2,000',
     apr: '24.99%',
     cashAdvanceLimit: r'$400',
     imagePath: 'assets/images/Home.svg',
     bulletPoints: ['Pre-approved up to \$2,000', '1.5% rewards on Autopay'],
-    rewardsLine: '1.5% rewards on Autopay',
+    rewardsLine: '1.5% cash back with Autopay',
     collateralType: 'Backed by Fixtures',
     timeToMoney: 'Time to money: 3 minutes',
+    annualFee: r'$40',
     terms: 'Annual Percentage Rate (APR) for Purchases: 24.99%\n\nAnnual Percentage Rate (APR) for Cash Advances: 24.99%\n\nPaying Interest: Your due date is at least 25 days after the close of each billing cycle.\n\nAnnual Fee: \$0\n\nTransaction Fees\nForeign Transactions: 3% of the transaction amount, in U.S. dollars',
   );
 
   static const unsecured = CardOffer(
     id: 'unsecured',
     priority: 3,
-    name: 'Flex Preferred Rewards',
+    name: 'Premier Rewards',
     description: 'No collateral needed. Build your credit and earn rewards with our flexible unsecured card.',
     creditLimit: r'$750',
-    apr: '28.99-35.99%',
+    apr: '28.99%',
     cashAdvanceLimit: r'$400',
     imagePath: 'assets/images/Unsecured.svg',
     bulletPoints: ['Pre-approved up to \$750', '1.5% rewards on Autopay'],
-    rewardsLine: '1.5% rewards on Autopay',
+    rewardsLine: '1.5% cash back with Autopay',
     collateralType: 'Non-backed',
     timeToMoney: 'Time to money: 3 minutes',
+    annualFee: r'$69',
     extraValueProp: 'No time to wait for full credit line',
     terms: 'Annual Percentage Rate (APR) for Purchases: 29.88%–35.88%\n\nAnnual Percentage Rate (APR) for Cash Advances: 29.88%\n\nPaying Interest: Your due date is at least 25 days after the close of each billing cycle.\n\nAnnual Fee: \$0\n\nTransaction Fees\nForeign Transactions: 3% of the transaction amount, in U.S. dollars',
   );
@@ -109,7 +114,7 @@ class YendoOffers {
     cashAdvanceLimit: r'$400',
     imagePath: 'assets/images/Vehicle.svg',
     bulletPoints: ['Pre-approved up to \$18,000', '1.5% rewards on Autopay'],
-    rewardsLine: '1.5% rewards on Autopay',
+    rewardsLine: '1.5% cash back with Autopay',
     collateralType: 'Backed by Car',
     timeToMoney: 'Time to money: X minutes',
     terms: 'Annual Percentage Rate (APR) for Purchases: 29.88%\n\nAnnual Percentage Rate (APR) for Cash Advances: 29.88%\n\nPaying Interest: Your due date is at least 25 days after the close of each billing cycle.\n\nAnnual Fee: \$0\n\nTransaction Fees\nForeign Transactions: 3% of the transaction amount, in U.S. dollars',

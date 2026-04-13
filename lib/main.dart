@@ -42,6 +42,15 @@ class ShowcaseHome extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Back arrow
+              GestureDetector(
+                onTap: () => Navigator.of(context).pop(),
+                child: const Padding(
+                  padding: EdgeInsets.only(bottom: 16),
+                  child: Icon(Icons.arrow_back_ios, size: 20, color: AppColors.navy),
+                ),
+              ),
+
               // Header
               Container(
                 width: double.infinity,
