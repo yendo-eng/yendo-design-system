@@ -12,6 +12,8 @@ import 'offers_selection_screen_v4.dart';
 import 'offers_selection_screen_single.dart';
 import 'offers_selection_screen_vh.dart';
 import 'offers_selection_screen_vh2.dart';
+import 'offers_selection_screen_vh_signature.dart';
+import 'offers_selection_screen_vh_premier.dart';
 import 'offers_selection_screen_cashback.dart';
 import 'offers_selection_screen_single_cashback.dart';
 import 'ux_improvements_flow.dart';
@@ -91,13 +93,27 @@ class FpoApplicationScreen extends StatelessWidget {
         const SizedBox(height: AppSpacing.sm),
 
         _OutcomeButton(
-          label: '🎛  VH Option 2',
-          sublabel: 'Card image + pre-approval summary in VH bottom sheet',
-          color: AppColors.blue400,
+          label: '💳  VH - Signature Rewards',
+          sublabel: 'Pre-approval → VH bottom sheet with Signature Rewards card — 2 steps, ~5 min',
+          color: AppColors.blue500,
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => OffersSelectionScreenVH2(offers: allOffers),
+              builder: (_) => OffersSelectionScreenVHSignature(offers: allOffers),
+            ),
+          ),
+        ),
+
+        const SizedBox(height: AppSpacing.sm),
+
+        _OutcomeButton(
+          label: '💳  VH - Premier Rewards',
+          sublabel: 'Pre-approval → VH bottom sheet with Premier Rewards card — 2 steps, ~5 min',
+          color: AppColors.blue500,
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => OffersSelectionScreenVHPremier(offers: allOffers),
             ),
           ),
         ),
@@ -273,6 +289,20 @@ class FpoApplicationScreen extends StatelessWidget {
         const SizedBox(height: AppSpacing.md),
 
         _SectionHeader(label: 'Archive'),
+
+        const SizedBox(height: AppSpacing.sm),
+
+        _OutcomeButton(
+          label: '🎛  VH Option 2',
+          sublabel: 'Card image + pre-approval summary in VH bottom sheet',
+          color: AppColors.neutralN200,
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => OffersSelectionScreenVH2(offers: allOffers),
+            ),
+          ),
+        ),
 
         const SizedBox(height: AppSpacing.sm),
 
