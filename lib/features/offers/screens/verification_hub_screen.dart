@@ -239,13 +239,10 @@ class _OfferHeroCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(16),
-      child: AspectRatio(
-        aspectRatio: 1536 / 969,
-        child: SvgPicture.asset(
-          'assets/images/Yendo Vehicle Equity Mastercard.svg',
-          fit: BoxFit.cover,
-          width: double.infinity,
-        ),
+      child: Image.asset(
+        'assets/images/Platinum Rewards.png',
+        fit: BoxFit.cover,
+        width: double.infinity,
       ),
     );
   }
