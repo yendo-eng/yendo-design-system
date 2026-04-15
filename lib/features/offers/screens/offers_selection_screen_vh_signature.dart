@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../../design_system/design_system.dart';
 import '../models/card_offer.dart';
 import 'compare_offers_screen.dart';
@@ -138,36 +139,31 @@ class _OffersSelectionScreenVHSignatureState
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
-                // Drag handle
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  child: Center(
-                    child: Container(
-                      width: 68,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: AppColors.neutralN500.withValues(alpha: 0.4),
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-                  ),
-                ),
-
-                // Header
+                // Header row with title + close button
                 Padding(
                   padding: const EdgeInsets.fromLTRB(
-                    AppSpacing.screenPaddingH, 12,
+                    AppSpacing.screenPaddingH, 20,
                     AppSpacing.screenPaddingH, 16,
                   ),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Welcome, Ringo!',
-                      style: AppTextStyles.heading3.copyWith(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w700,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Welcome, Ringo!',
+                        style: AppTextStyles.heading3.copyWith(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
-                    ),
+                      GestureDetector(
+                        onTap: () => Navigator.of(context).pop(),
+                        child: SvgPicture.asset(
+                          'assets/svgs/close_modal_icon.svg',
+                          width: 32,
+                          height: 32,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
 
