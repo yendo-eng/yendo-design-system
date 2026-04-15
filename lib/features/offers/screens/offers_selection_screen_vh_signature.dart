@@ -158,7 +158,7 @@ class _OffersSelectionScreenVHSignatureState
                       GestureDetector(
                         onTap: () => Navigator.of(context).pop(),
                         child: SvgPicture.asset(
-                          'assets/svgs/close_modal_icon.svg',
+                          'assets/svgs/close_icon_no_bg.svg',
                           width: 32,
                           height: 32,
                         ),
