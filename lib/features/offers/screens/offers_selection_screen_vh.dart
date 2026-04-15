@@ -159,8 +159,8 @@ class _OffersSelectionScreenVHState extends State<OffersSelectionScreenVH> {
                         onTap: () => Navigator.of(context).pop(),
                         child: SvgPicture.asset(
                           'assets/svgs/close_icon_no_bg.svg',
-                          width: 32,
-                          height: 32,
+                          width: 26,
+                          height: 26,
                         ),
                       ),
                     ],
