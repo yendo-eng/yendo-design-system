@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'design_system/design_system.dart';
 import 'features/offers/screens/fpo_application_screen.dart';
 import 'features/offers/models/card_offer.dart';
+import 'features/tlo/screens/tlo_home_screen.dart';
 
 void main() {
   runApp(const DesignSystemApp());
@@ -16,13 +17,10 @@ class DesignSystemApp extends StatelessWidget {
       title: 'Yendo Design System',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: AppColors.neutralN50,
+        scaffoldBackgroundColor: AppColors.white,
         fontFamily: 'PPNeueMontreal',
       ),
-      home: FpoApplicationScreen(
-        selectedOffer: YendoOffers.all.first,
-        allOffers: YendoOffers.all,
-      ),
+      home: const TloHomeScreen(),
     );
   }
 }

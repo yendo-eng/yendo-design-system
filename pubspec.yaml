@@ -61,6 +61,7 @@ flutter:
     - assets/images/
     - assets/svgs/
     - assets/svgs/logos/
+    - assets/svgs/vehicles/
 
   fonts:
     - family: PPNeueMontreal

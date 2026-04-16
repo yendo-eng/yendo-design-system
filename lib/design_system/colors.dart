@@ -21,6 +21,7 @@ class AppColors {
   static const Color neutralN100 = Color(0xFFE4EBF1);
   static const Color neutralN200 = Color(0xFFD9E1E8);
   static const Color neutralN500 = Color(0xFF4D6173);
+  static const Color neutralN600 = Color(0xFF2E4457);
 
   // ── Content ────────────────────────────────────────────
   static const Color contentDisabled = Color(0xFF74899A);
@@ -36,6 +37,9 @@ class AppColors {
   // ── Red ────────────────────────────────────────────────
   static const Color red400 = Color(0xFFE84040);
   static const Color red500 = Color(0xFFCC2020);
+
+  // ── Dark Blue (link color) ─────────────────────────────
+  static const Color darkBlue = Color(0xFF0E4780);
 
   // ── Blue ───────────────────────────────────────────────
   static const Color blue50  = Color(0xFFF0F6FF);
