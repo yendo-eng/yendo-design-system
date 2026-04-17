@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'design_system/design_system.dart';
 import 'features/offers/screens/fpo_application_screen.dart';
+import 'features/offers/screens/auto_refi_v2_hub.dart';
 import 'features/offers/models/card_offer.dart';
-import 'features/tlo/screens/tlo_home_screen.dart';
+
 
 void main() {
   runApp(const DesignSystemApp());
@@ -20,7 +21,7 @@ class DesignSystemApp extends StatelessWidget {
         scaffoldBackgroundColor: AppColors.white,
         fontFamily: 'PPNeueMontreal',
       ),
-      home: const TloHomeScreen(),
+      home: const AutoRefiV2Hub(),
     );
   }
 }
