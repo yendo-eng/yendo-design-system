@@ -326,7 +326,7 @@ class AutoRefiFinalOfferV2B extends StatelessWidget {
           ),
         ),
 
-        const Spacer(),
+        const SizedBox(height: AppSpacing.lg),
 
         // ── Footnote ───────────────────────────────────────
         Padding(
@@ -562,6 +562,347 @@ class AutoRefiFinalOfferV2C extends StatelessWidget {
         ),
 
         const SizedBox(height: AppSpacing.xxl),
+      ],
+    );
+  }
+}
+
+// ── Variation D: Credit-Card Hero — emphasise card, bundle refi ───────────────
+
+/// Auto Refi v2 Final Offer — Variation D: Credit-Card Hero
+///
+/// Messaging strategy:
+///   • Lead with the credit card — this is the exciting part.
+///   • Reframe the auto refinance as a simple, automatic bundle ("one tap").
+///   • Allay refi anxiety with card benefits: instant cash + growing limit.
+///   • Show APR transparently (29.99%).
+///
+/// Mid-fidelity prototype — uses real tokens, icon placeholders, full layout.
+
+class AutoRefiFinalOfferV2D extends StatelessWidget {
+  const AutoRefiFinalOfferV2D({
+    super.key,
+    this.offer = YendoOffers.vehicle,
+    this.monthlyPayment = r'$232.14',
+    this.monthlySavings = r'$100',
+    this.offerExpiry = 'August 22, 2025 at 11:59pm CT',
+    this.onAccept,
+    this.onDecline,
+  });
+
+  final CardOffer offer;
+  final String monthlyPayment;
+  final String monthlySavings;
+  final String offerExpiry;
+  final VoidCallback? onAccept;
+  final VoidCallback? onDecline;
+
+  @override
+  Widget build(BuildContext context) {
+    return KBaseScreenMultiLayout(
+      showStatusBar: true,
+      statusBarBackgroundColor: AppColors.white,
+      contentBackgroundColor: AppColors.white,
+      contentPadding: 0,
+      appBar: AppNavBar.logo(backgroundColor: AppColors.white, height: 46),
+      hasStickyFooter: true,
+      footer: _Footer(onAccept: onAccept, onDecline: onDecline, offerExpiry: offerExpiry),
+      content: [
+        // ── Approved badge + heading ───────────────────────
+        Padding(
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.screenPaddingH, AppSpacing.md,
+            AppSpacing.screenPaddingH, 0,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // "You're approved" pill
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.green400.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(AppSpacing.radiusPill),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.check_circle_rounded,
+                        size: 14, color: AppColors.green400),
+                    const SizedBox(width: 4),
+                    Text(
+                      "You're approved",
+                      style: AppTextStyles.caption.copyWith(
+                        color: AppColors.green400,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: AppSpacing.sm),
+
+              Text(
+                'Accept your\n${offer.name} Mastercard',
+                style: AppTextStyles.h2.copyWith(
+                  fontWeight: FontWeight.w700,
+                  height: 1.25,
+                ),
+              ),
+
+              const SizedBox(height: AppSpacing.xs),
+
+              Text(
+                'Get instant access to a revolving credit line — '
+                'your limit grows every month.',
+                style: AppTextStyles.body2.copyWith(color: AppColors.neutralN500),
+              ),
+            ],
+          ),
+        ),
+
+        const SizedBox(height: AppSpacing.md),
+
+        // ── Card hero ──────────────────────────────────────
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screenPaddingH),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+            child: SvgPicture.asset(
+              offer.imagePath,
+              width: double.infinity,
+              height: 180,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+
+        const SizedBox(height: AppSpacing.lg),
+
+        // ── Card benefits ──────────────────────────────────
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screenPaddingH),
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.neutralN50,
+              borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+            ),
+            padding: const EdgeInsets.all(AppSpacing.md),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'CARD BENEFITS',
+                  style: AppTextStyles.overline.copyWith(
+                    color: AppColors.neutralN500,
+                    letterSpacing: 1.2,
+                  ),
+                ),
+
+                const SizedBox(height: AppSpacing.sm),
+
+                _BenefitRow(
+                  icon: Icons.bolt_rounded,
+                  iconColor: AppColors.primaryO400,
+                  title: 'Instant access to cash',
+                  subtitle: 'Use your credit line the moment your card arrives.',
+                ),
+
+                const SizedBox(height: AppSpacing.sm),
+
+                _BenefitRow(
+                  icon: Icons.trending_up_rounded,
+                  iconColor: AppColors.primaryO400,
+                  title: 'Credit limit grows every month',
+                  subtitle:
+                      'Your limit automatically increases as you pay down your loan.',
+                ),
+
+                const SizedBox(height: AppSpacing.sm),
+
+                _BenefitRow(
+                  icon: Icons.percent_rounded,
+                  iconColor: AppColors.neutralN500,
+                  title: 'APR 29.99%',
+                  subtitle: 'Standard variable APR.',
+                  titleColor: AppColors.neutralN600,
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        const SizedBox(height: AppSpacing.md),
+
+        // ── Refinance bundle — kept secondary / reassuring ─
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screenPaddingH),
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+              border: Border.all(color: AppColors.neutralN100),
+            ),
+            padding: const EdgeInsets.all(AppSpacing.md),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Header row
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: AppColors.navy.withValues(alpha: 0.06),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Icon(Icons.directions_car_rounded,
+                          size: 16, color: AppColors.navy),
+                    ),
+                    const SizedBox(width: AppSpacing.sm),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Includes auto refinance',
+                          style: AppTextStyles.bodyRegular.copyWith(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                        ),
+                        Text(
+                          'Bundled with your card — one tap, no paperwork',
+                          style: AppTextStyles.caption.copyWith(
+                            color: AppColors.neutralN500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: AppSpacing.md),
+
+                // Monthly payment row
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      monthlyPayment,
+                      style: AppTextStyles.spaceGrotesk(
+                        fontSize: 28,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.navy,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 3),
+                      child: Text(
+                        '/mo',
+                        style: AppTextStyles.body2.copyWith(
+                          color: AppColors.neutralN500,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: AppSpacing.sm),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: AppColors.green400.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(AppSpacing.radiusPill),
+                      ),
+                      child: Text(
+                        'Save \$$monthlySavings/mo',
+                        style: AppTextStyles.caption.copyWith(
+                          color: AppColors.green400,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: AppSpacing.xs),
+
+                // Reassurance text
+                Row(
+                  children: [
+                    const Icon(Icons.lock_outline_rounded,
+                        size: 13, color: AppColors.contentDisabled),
+                    const SizedBox(width: 4),
+                    Text(
+                      'No penalty for early pay-off · Takes 10 seconds',
+                      style: AppTextStyles.caption.copyWith(
+                          color: AppColors.contentDisabled),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        const SizedBox(height: AppSpacing.xxl),
+      ],
+    );
+  }
+}
+
+// ── Benefit row widget (used by Variation D) ───────────────────────────────────
+
+class _BenefitRow extends StatelessWidget {
+  const _BenefitRow({
+    required this.icon,
+    required this.iconColor,
+    required this.title,
+    required this.subtitle,
+    this.titleColor,
+  });
+
+  final IconData icon;
+  final Color iconColor;
+  final String title;
+  final String subtitle;
+  final Color? titleColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 32,
+          height: 32,
+          decoration: BoxDecoration(
+            color: iconColor.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(icon, size: 16, color: iconColor),
+        ),
+        const SizedBox(width: AppSpacing.sm),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: AppTextStyles.bodyRegular.copyWith(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                  color: titleColor ?? AppColors.navy,
+                ),
+              ),
+              Text(
+                subtitle,
+                style: AppTextStyles.caption.copyWith(
+                  color: AppColors.neutralN500,
+                  height: 1.4,
+                ),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }

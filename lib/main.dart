@@ -14,14 +14,25 @@ class DesignSystemApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Yendo Design System',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        scaffoldBackgroundColor: AppColors.white,
-        fontFamily: 'PPNeueMontreal',
+    // Wireframe mode — desaturates the entire app so all screens render as
+    // greyscale low-fidelity wireframes. Remove ColorFiltered to restore colour.
+    return ColorFiltered(
+      colorFilter: const ColorFilter.matrix([
+        // Luminosity-weighted greyscale matrix (ITU-R BT.709)
+        0.2126, 0.7152, 0.0722, 0, 0,
+        0.2126, 0.7152, 0.0722, 0, 0,
+        0.2126, 0.7152, 0.0722, 0, 0,
+        0,      0,      0,      1, 0,
+      ]),
+      child: MaterialApp(
+        title: 'Yendo Design System',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          scaffoldBackgroundColor: AppColors.white,
+          fontFamily: 'PPNeueMontreal',
+        ),
+        home: const AutoRefiV2Hub(),
       ),
-      home: const AutoRefiV2Hub(),
     );
   }
 }

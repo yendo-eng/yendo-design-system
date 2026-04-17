@@ -110,6 +110,25 @@ class AutoRefiV2Hub extends StatelessWidget {
                 ),
               ),
 
+              const SizedBox(height: AppSpacing.sm),
+
+              // Variation D
+              _VariationTile(
+                label: 'Variation D',
+                tag: 'Card-hero',
+                description:
+                    'Approved badge · Card hero · Benefit rows with icons '
+                    '(instant cash, growing limit, APR) · Bundled refi secondary card',
+                wireframe: 'Mid-fidelity',
+                accentColor: AppColors.primaryO400,
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const AutoRefiFinalOfferV2D(),
+                  ),
+                ),
+              ),
+
               const SizedBox(height: AppSpacing.xl),
             ],
           ),
